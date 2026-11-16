@@ -1,0 +1,21 @@
+checkName,checkLevel,cdmTableName,category,subcategory,context,cdmFieldName,conceptId,unitConceptId,CDM_SOURCE_NAME,CDM_SOURCE_ABBREVIATION,CDM_SOURCE_KEY,RELEASE_NAME,RELEASE_ID
+cdmTable,TABLE,COHORT,Conformance,Relational,Verification,,,,Synthetic concurrent disorders,SYNCD,SYNCD,2026-11-12,20261112
+cdmTable,TABLE,COHORT_DEFINITION,Conformance,Relational,Verification,,,,Synthetic concurrent disorders,SYNCD,SYNCD,2026-11-12,20261112
+cdmDatatype,FIELD,DRUG_EXPOSURE,Conformance,Value,Verification,DAYS_SUPPLY,,,Synthetic concurrent disorders,SYNCD,SYNCD,2026-11-12,20261112
+isForeignKey,FIELD,COST,Conformance,Relational,Verification,CURRENCY_CONCEPT_ID,,,Synthetic concurrent disorders,SYNCD,SYNCD,2026-11-12,20261112
+isForeignKey,FIELD,PROVIDER,Conformance,Relational,Verification,SPECIALTY_CONCEPT_ID,,,Synthetic concurrent disorders,SYNCD,SYNCD,2026-11-12,20261112
+isForeignKey,FIELD,PROVIDER,Conformance,Relational,Verification,SPECIALTY_SOURCE_CONCEPT_ID,,,Synthetic concurrent disorders,SYNCD,SYNCD,2026-11-12,20261112
+fkClass,FIELD,DRUG_STRENGTH,Conformance,Computational,Verification,INGREDIENT_CONCEPT_ID,,,Synthetic concurrent disorders,SYNCD,SYNCD,2026-11-12,20261112
+isStandardValidConcept,FIELD,OBSERVATION,Conformance,Value,Verification,OBSERVATION_TYPE_CONCEPT_ID,,,Synthetic concurrent disorders,SYNCD,SYNCD,2026-11-12,20261112
+standardConceptRecordCompleteness,FIELD,CONDITION_OCCURRENCE,Completeness,,Verification,CONDITION_STATUS_CONCEPT_ID,,,Synthetic concurrent disorders,SYNCD,SYNCD,2026-11-12,20261112
+standardConceptRecordCompleteness,FIELD,MEASUREMENT,Completeness,,Verification,UNIT_CONCEPT_ID,,,Synthetic concurrent disorders,SYNCD,SYNCD,2026-11-12,20261112
+standardConceptRecordCompleteness,FIELD,OBSERVATION,Completeness,,Verification,UNIT_CONCEPT_ID,,,Synthetic concurrent disorders,SYNCD,SYNCD,2026-11-12,20261112
+standardConceptRecordCompleteness,FIELD,VISIT_DETAIL,Completeness,,Verification,ADMITTED_FROM_CONCEPT_ID,,,Synthetic concurrent disorders,SYNCD,SYNCD,2026-11-12,20261112
+standardConceptRecordCompleteness,FIELD,VISIT_DETAIL,Completeness,,Verification,DISCHARGED_TO_CONCEPT_ID,,,Synthetic concurrent disorders,SYNCD,SYNCD,2026-11-12,20261112
+standardConceptRecordCompleteness,FIELD,VISIT_OCCURRENCE,Completeness,,Verification,ADMITTED_FROM_CONCEPT_ID,,,Synthetic concurrent disorders,SYNCD,SYNCD,2026-11-12,20261112
+standardConceptRecordCompleteness,FIELD,VISIT_OCCURRENCE,Completeness,,Verification,DISCHARGED_TO_CONCEPT_ID,,,Synthetic concurrent disorders,SYNCD,SYNCD,2026-11-12,20261112
+plausibleValueLow,FIELD,DRUG_EXPOSURE,Plausibility,Atemporal,Verification,DAYS_SUPPLY,,,Synthetic concurrent disorders,SYNCD,SYNCD,2026-11-12,20261112
+plausibleValueLow,FIELD,DRUG_EXPOSURE,Plausibility,Atemporal,Verification,QUANTITY,,,Synthetic concurrent disorders,SYNCD,SYNCD,2026-11-12,20261112
+plausibleValueLow,FIELD,OBSERVATION_PERIOD,Plausibility,Atemporal,Verification,OBSERVATION_PERIOD_START_DATE,,,Synthetic concurrent disorders,SYNCD,SYNCD,2026-11-12,20261112
+plausibleValueHigh,FIELD,DRUG_EXPOSURE,Plausibility,Atemporal,Verification,DAYS_SUPPLY,,,Synthetic concurrent disorders,SYNCD,SYNCD,2026-11-12,20261112
+plausibleValueHigh,FIELD,PAYER_PLAN_PERIOD,Plausibility,Atemporal,Verification,PAYER_PLAN_PERIOD_END_DATE,,,Synthetic concurrent disorders,SYNCD,SYNCD,2026-11-12,20261112

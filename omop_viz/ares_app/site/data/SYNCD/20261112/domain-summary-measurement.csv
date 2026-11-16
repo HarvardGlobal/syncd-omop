@@ -1,0 +1,226 @@
+CONCEPT_ID,CONCEPT_NAME,NUM_PERSONS,PERCENT_PERSONS,RECORDS_PER_PERSON,PERCENT_MISSING_VALUES,PERCENT_PERSONS_NTILE,RECORDS_PER_PERSON_NTILE
+43055141,Pain severity - 0-10 verbal numeric rating [Score] - Reported,9449,0.9449,  7.0,,1,2
+3004249,Systolic blood pressure,9449,0.9449,  3.4,,1,4
+3012888,Diastolic blood pressure,9449,0.9449,  3.4,,1,4
+3027018,Heart rate,9448,0.9448,  3.2,,1,4
+3024171,Respiratory rate,9448,0.9448,  3.2,,1,4
+3036277,Body height,9446,0.9446,  3.2,,1,4
+3038553,Body mass index (BMI) [Ratio],9446,0.9446,  3.2,,1,4
+3025315,Body weight,9446,0.9446,  3.3,,1,4
+765449,Assessment using PHQ-2 questionnaire,8580,0.8580,  2.7,,1,4
+44792141,Alcohol use disorder identification test consumption questionnaire,8454,0.8454,  2.6,,1,4
+4158091,Screening for harmful pattern of substance use,8445,0.8445,  2.6,,1,4
+3007070,Cholesterol in HDL [Mass/volume] in Serum or Plasma,6002,0.6002,  2.5,,1,4
+3027114,Cholesterol [Mass/volume] in Serum or Plasma,6002,0.6002,  2.5,,1,4
+3022192,Triglyceride [Mass/volume] in Serum or Plasma,6002,0.6002,  2.5,,1,4
+3009966,Cholesterol in LDL [Mass/volume] in Serum or Plasma by Direct assay,6002,0.6002,  2.5,,1,5
+3000483,Glucose [Mass/volume] in Blood,5609,0.5609,  5.1,,1,3
+3000285,Sodium [Moles/volume] in Blood,5609,0.5609,  5.1,,1,3
+3004295,Urea nitrogen [Mass/volume] in Blood,5609,0.5609,  5.1,,1,3
+3005456,Potassium [Moles/volume] in Blood,5609,0.5609,  5.1,,1,3
+3018572,Chloride [Moles/volume] in Blood,5609,0.5609,  5.1,,1,3
+3032503,Calcium [Mass/volume] in Blood,5609,0.5609,  5.1,,1,3
+3014094,"Carbon dioxide, total [Moles/volume] in Blood",5609,0.5609,  5.1,,1,3
+3051825,Creatinine [Mass/volume] in Blood,5609,0.5609,  5.1,,1,3
+3004410,Hemoglobin A1c/Hemoglobin.total in Blood,5109,0.5109,  4.8,,2,3
+3661628,Screening for domestic abuse,5069,0.5069,  1.8,,2,5
+3000963,Hemoglobin [Mass/volume] in Blood,4038,0.4038,  1.6,,2,5
+3009744,MCHC [Entitic Mass/volume] in Red Blood Cells by Automated count,4035,0.4035,  1.6,,2,5
+3024929,Platelets [#/volume] in Blood by Automated count,4035,0.4035,  1.6,,2,5
+3000905,Leukocytes [#/volume] in Blood by Automated count,4035,0.4035,  1.6,,2,5
+3020416,Erythrocytes [#/volume] in Blood by Automated count,4035,0.4035,  1.6,,2,5
+3012030,MCH [Entitic mass] by Automated count,4035,0.4035,  1.6,,2,5
+3023599,MCV [Entitic mean volume] in Red Blood Cells by Automated count,4035,0.4035,  1.6,,2,5
+3023314,Hematocrit [Volume Fraction] of Blood by Automated count,3903,0.3903,  1.6,,2,5
+3015182,Erythrocyte distribution width [Entitic volume] by Automated count,3886,0.3886,  1.3,,2,5
+3043111,Platelet [Entitic mean volume] in Blood by Automated count,3886,0.3886,  1.3,,2,5
+3002736,Platelet distribution width [Entitic volume] in Blood by Automated count,3886,0.3886,  1.3,,2,5
+46236952,"Glomerular filtration rate [Volume Rate/Area] in Serum, Plasma or Blood by Creatinine-based formula (MDRD)/1.73 sq M",3238,0.3238, 10.5,,2,2
+4141655,Morse falls risk assessment,2762,0.2762,  3.6,,2,4
+44804610,PHQ-9 - Patient health questionnaire 9,2208,0.2208,  1.9,,2,5
+3035995,Alkaline phosphatase [Enzymatic activity/volume] in Serum or Plasma,1937,0.1937,  4.5,,2,3
+3013721,Aspartate aminotransferase [Enzymatic activity/volume] in Serum or Plasma,1937,0.1937,  4.5,,2,3
+3020630,Protein [Mass/volume] in Serum or Plasma,1937,0.1937,  4.5,,2,3
+3006923,Alanine aminotransferase [Enzymatic activity/volume] in Serum or Plasma,1937,0.1937,  4.5,,2,4
+3024561,Albumin [Mass/volume] in Serum or Plasma,1937,0.1937,  4.5,,2,4
+3024128,Bilirubin.total [Mass/volume] in Serum or Plasma,1933,0.1933,  4.5,,2,4
+3027970,Globulin [Mass/volume] in Serum by calculation,1766,0.1766,  4.2,,2,4
+3000330,Specific gravity of Urine by Test strip,1738,0.1738, 13.8,,3,1
+3021601,Nitrite [Presence] in Urine by Test strip,1738,0.1738, 13.8,,3,1
+3000348,Leukocyte esterase [Presence] in Urine by Test strip,1738,0.1738, 13.8,,3,1
+3011397,Hemoglobin [Presence] in Urine by Test strip,1738,0.1738, 13.8,,3,1
+3035350,Ketones [Presence] in Urine by Test strip,1738,0.1738, 13.8,,3,1
+3022621,pH of Urine by Test strip,1738,0.1738, 13.8,,3,1
+3024629,Glucose [Mass/volume] in Urine by Test strip,1660,0.1660, 14.2,,3,1
+3005897,Protein [Mass/volume] in Urine by Test strip,1660,0.1660, 14.2,,3,1
+3015632,"Carbon dioxide, total [Moles/volume] in Serum or Plasma",1627,0.1627, 12.3,,3,1
+3014576,Chloride [Moles/volume] in Serum or Plasma,1627,0.1627, 12.3,,3,1
+3013682,Urea nitrogen [Mass/volume] in Serum or Plasma,1627,0.1627, 12.3,,3,1
+3019550,Sodium [Moles/volume] in Serum or Plasma,1627,0.1627, 12.3,,3,1
+3006906,Calcium [Mass/volume] in Serum or Plasma,1627,0.1627, 12.3,,3,1
+3004501,Glucose [Mass/volume] in Serum or Plasma,1627,0.1627, 12.3,,3,2
+3016723,Creatinine [Mass/volume] in Serum or Plasma,1627,0.1627, 12.3,,3,2
+3023103,Potassium [Moles/volume] in Serum or Plasma,1627,0.1627, 12.3,,3,2
+3018834,Bilirubin.total [Presence] in Urine by Test strip,1557,0.1557, 15.3,,3,1
+3009261,Glucose [Presence] in Urine by Test strip,1557,0.1557, 15.3,,3,1
+3014051,Protein [Presence] in Urine by Test strip,1557,0.1557, 15.3,,3,1
+3027162,Color of Urine,1478,0.1478, 15.8,,3,1
+3044880,Odor of Urine,1478,0.1478, 15.7,,3,1
+3008204,Clarity of Urine,1478,0.1478, 15.8,,3,1
+3007876,Appearance of Urine,1478,0.1478, 15.9,,3,1
+3006513,Bilirubin.total [Mass/volume] in Urine by Test strip,1478,0.1478, 15.8,,4,1
+3023539,Ketones [Mass/volume] in Urine by Test strip,1478,0.1478, 15.8,,4,1
+3020891,Body temperature,1406,0.1406,  1.1,,4,6
+3001802,Microalbumin/Creatinine [Mass Ratio] in Urine,945,0.0945,  6.8,,4,2
+4091461,Standard pregnancy test,818,0.0818,  1.2,,4,6
+4064377,Depression screening,792,0.0792,  1.2,,4,6
+4258677,Blood group typing,707,0.0707,  1.1,,4,6
+4015052,"Hemogram, automated, with RBC, WBC, Hgb, Hct, Indices, Platelet count, and manual WBC differential",662,0.0662,  1.8,,4,5
+4151408,Syphilis infectious titer test,576,0.0576,  1.1,,4,6
+4018603,"Hepatitis C antibody, confirmatory test",576,0.0576,  1.1,,4,6
+4168615,Hepatitis B surface antigen measurement,576,0.0576,  1.1,,4,6
+4191851,Urine screening test for diabetes,576,0.0576,  1.1,,4,6
+4018595,Measurement of Varicella-zoster virus antibody,576,0.0576,  1.1,,4,6
+4195645,Rubella screening test,576,0.0576,  1.1,,4,6
+4211845,Urine protein measurement,576,0.0576,  1.1,,4,6
+4136494,HIV antigen test,576,0.0576,  1.1,,4,6
+4014117,Gonorrhea infection titer test,576,0.0576,  1.1,,4,6
+4102154,"Skin test for tuberculosis, Tine test",576,0.0576,  1.1,,4,6
+4149631,Chlamydia antigen test,576,0.0576,  1.1,,4,7
+4024509,Urine culture,576,0.0576,  1.1,,4,7
+4078285,Alpha-fetoprotein test - antenatal,565,0.0565,  1.1,,4,7
+4149386,Urine screening for glucose,558,0.0558,  1.1,,4,7
+4304821,Streptococcus pneumoniae group B antigen assay,520,0.0520,  1.1,,4,7
+40762638,Body mass index (BMI) [Percentile] Per age and sex,498,0.0498,  1.8,,5,5
+4024958,Throat culture,434,0.0434,  1.0,,5,8
+4195803,Bone density scan,333,0.0333,  1.2,,5,6
+44786664,Weight difference [Mass difference] --pre dialysis - post dialysis,289,0.0289,118.5,,5,1
+3049273,DXA Radius and Ulna [T-score] Bone density,286,0.0286,  1.0,,5,8
+3009542,Hematocrit [Volume Fraction] of Blood by calculation,266,0.0266,  1.1,,5,7
+3019897,Erythrocyte [DistWidth] in Blood by Automated count,263,0.0263,  4.9,,5,3
+4033233,Peripheral blood smear interpretation,259,0.0259,  1.0,,5,8
+36306105,Troponin I.cardiac [Mass/volume] in Serum or Plasma by High sensitivity method,239,0.0239,  2.3,,5,5
+3016502,Oxygen saturation in Arterial blood,233,0.0233,  5.5,,5,3
+3011505,FEV1/FVC,218,0.0218,  3.3,,5,4
+3006175,Mucus [Presence] in Urine sediment by Light microscopy,209,0.0209,  1.2,,5,6
+3003291,Casts [Presence] in Urine sediment by Light microscopy,209,0.0209,  1.2,,5,6
+3035583,Leukocytes [#/area] in Urine sediment by Microscopy high power field,209,0.0209,  1.2,,5,6
+40479598,Urinalysis with reflex to microscopy and culture,209,0.0209,  1.6,,5,5
+3035124,Erythrocytes [#/area] in Urine sediment by Microscopy high power field,209,0.0209,  1.2,,5,6
+3010189,Epithelial cells [#/area] in Urine sediment by Microscopy high power field,209,0.0209,  1.2,,5,6
+3026008,Bacteria identified in Urine by Culture,209,0.0209,  1.2,,5,6
+3025255,Bacteria [#/area] in Urine sediment by Microscopy high power field,209,0.0209,  1.2,,5,6
+3001420,Magnesium [Mass/volume] in Serum or Plasma,197,0.0197,  6.5,,5,2
+3013466,aPTT in Blood by Coagulation assay,194,0.0194,  4.5,,5,4
+3022217,INR in Platelet poor plasma by Coagulation assay,194,0.0194,  4.8,,5,3
+4151422,Sputum examination,188,0.0188,  1.0,,5,8
+3027172,Left ventricular Ejection fraction,183,0.0183,  1.5,,6,5
+4018619,Screening for occult blood in feces,179,0.0179,  1.0,,6,8
+3030315,Polyp size greatest dimension,179,0.0179,  1.0,,6,8
+40761014,Hemoglobin [Presence] in Stool from gastrointestinal lower by Immunoassay --1st specimen,179,0.0179,  1.0,,6,8
+3016948,Activated clotting time (ACT) of Blood by Coagulation assay,125,0.0125,  1.0,,6,8
+3034426,Prothrombin time (PT),121,0.0121,  6.5,,6,2
+3027801,Oxygen [Partial pressure] in Arterial blood,121,0.0121,  7.5,,6,2
+3027946,Carbon dioxide [Partial pressure] in Arterial blood,121,0.0121,  7.5,,6,2
+3011904,Phosphate [Mass/volume] in Serum or Plasma,121,0.0121,  6.5,,6,2
+3019977,pH of Arterial blood,121,0.0121,  7.5,,6,2
+3008152,Bicarbonate [Moles/volume] in Arterial blood,121,0.0121,  7.5,,6,2
+3009201,Thyrotropin [Units/volume] in Serum or Plasma,116,0.0116,  1.0,,6,8
+3027273,Bicarbonate [Moles/volume] in Venous blood,114,0.0114,  1.0,,6,8
+3021447,Carbon dioxide [Partial pressure] in Venous blood,114,0.0114,  1.0,,6,8
+3010140,"Carbon dioxide, total [Moles/volume] in Venous blood",114,0.0114,  1.0,,6,8
+3012544,pH of Venous blood,114,0.0114,  1.0,,6,8
+3024354,Oxygen [Partial pressure] in Venous blood,114,0.0114,  1.0,,6,8
+3013603,Prostate specific Ag [Mass/volume] in Serum or Plasma,85,0.0085,  1.7,,6,5
+3014902,Physical findings of Prostate,85,0.0085,  1.7,,6,5
+3006916,Magnesium [Mass/volume] in Blood,76,0.0076,  1.0,,6,8
+42870364,Natriuretic peptide.B prohormone N-Terminal [Mass/volume] in Blood by Immunoassay,76,0.0076,  1.0,,6,8
+4060266,Antenatal RhD antibody screening,75,0.0075,  1.1,,6,7
+4264167,Taking patient vital signs,70,0.0070,  1.0,,7,8
+3001122,Ferritin [Mass/volume] in Serum or Plasma,69,0.0069,  5.1,,7,3
+3029187,Natriuretic peptide.B prohormone N-Terminal [Mass/volume] in Serum or Plasma,69,0.0069,  5.1,,7,3
+3021044,Iron binding capacity [Mass/volume] in Serum or Plasma,69,0.0069,  5.1,,7,3
+3000185,Iron saturation [Mass Fraction] in Serum or Plasma,69,0.0069,  5.1,,7,3
+3002400,Iron [Mass/volume] in Serum or Plasma,69,0.0069,  5.1,,7,3
+4223299,New York Heart Association Classification,64,0.0064,  1.0,,7,8
+4034850,Laboratory test,64,0.0064,  1.0,,7,8
+3018954,Choriogonadotropin [Presence] in Urine,49,0.0049,  1.0,,7,8
+3021226,Shrimp IgE Ab [Units/volume] in Serum,49,0.0049,  1.1,,7,7
+3020655,Honey bee IgE Ab [Units/volume] in Serum,49,0.0049,  1.1,,7,7
+3019406,Latex IgE Ab [Units/volume] in Serum,49,0.0049,  1.1,,7,7
+3023430,Cat dander IgE Ab [Units/volume] in Serum,49,0.0049,  1.1,,7,7
+3027231,Wheat IgE Ab [Units/volume] in Serum,49,0.0049,  1.1,,7,7
+3015076,Soybean IgE Ab [Units/volume] in Serum,49,0.0049,  1.1,,7,7
+3014599,Egg white IgE Ab [Units/volume] in Serum,49,0.0049,  1.1,,7,7
+3036780,American house dust mite IgE Ab [Units/volume] in Serum,49,0.0049,  1.1,,7,7
+3012494,Peanut IgE Ab [Units/volume] in Serum,49,0.0049,  1.1,,7,7
+3006734,White Oak IgE Ab [Units/volume] in Serum,49,0.0049,  1.1,,7,7
+3006451,Walnut IgE Ab [Units/volume] in Serum,49,0.0049,  1.1,,7,7
+3005136,Cladosporium herbarum IgE Ab [Units/volume] in Serum,49,0.0049,  1.1,,7,7
+4191853,Allergy screening test,49,0.0049,  1.1,,7,7
+3001488,Cow milk IgE Ab [Units/volume] in Serum,49,0.0049,  1.1,,8,7
+3001247,Common Ragweed IgE Ab [Units/volume] in Serum,49,0.0049,  1.1,,8,7
+3000876,Codfish IgE Ab [Units/volume] in Serum,49,0.0049,  1.1,,8,8
+4201046,HIV viral load,25,0.0025,  5.3,,8,3
+3010747,HIV 1 RNA [#/volume] (viral load) in Serum or Plasma by NAA with probe detection,25,0.0025,  5.3,,8,3
+4319466,"Complete blood count with white cell differential, automated",25,0.0025,  3.7,,8,4
+3028167,CD3+CD4+ (T4 helper) cells [#/volume] in Blood,25,0.0025,  3.8,,8,4
+4209260,Absolute CD4 count procedure,25,0.0025,  3.8,,8,4
+40762619,Treatment status Cancer,21,0.0021,  1.0,,8,8
+4161390,Human epidermal growth factor receptor 2 gene detection by immunohistochemistry,19,0.0019,  1.0,,8,9
+3046523,Site of distant metastasis in Breast tumor,19,0.0019,  1.0,,8,9
+3007727,Regional lymph nodes.clinical [Class] Cancer,19,0.0019,  1.0,,8,9
+4200764,Human epidermal growth factor receptor 2 gene detection by fluorescence in situ hybridization,19,0.0019,  1.0,,8,9
+3046581,Size.maximum dimension in Tumor,19,0.0019,  1.0,,8,9
+4132152,Complete blood count,15,0.0015,  1.0,,8,9
+3047181,Lactate [Moles/volume] in Blood,14,0.0014,  1.8,,8,5
+36304747,Gram positive blood culture panel by Probe in Positive blood culture,14,0.0014,  1.0,,8,9
+3043469,Capillary refill [Time] of Nail bed,14,0.0014,  1.0,,8,9
+3027598,Mean blood pressure,14,0.0014,  1.0,,8,9
+3010457,Eosinophils/Leukocytes in Blood by Automated count,13,0.0013,  5.8,,8,2
+3013869,Basophils/Leukocytes in Blood by Automated count,13,0.0013,  5.8,,8,2
+3011948,Monocytes/Leukocytes in Blood by Automated count,13,0.0013,  5.8,,8,2
+40769179,Percentage area affected by eczema Head and Neck [PhenX],13,0.0013,  1.0,,9,9
+40769184,Percentage area affected by eczema Upper extremity - bilateral [PhenX],13,0.0013,  1.0,,9,9
+40769189,Percentage area affected by eczema Trunk [PhenX],13,0.0013,  1.0,,9,9
+40769194,Percentage area affected by eczema Lower extremity - bilateral [PhenX],13,0.0013,  1.0,,9,9
+3013650,Neutrophils [#/volume] in Blood by Automated count,13,0.0013,  5.8,,9,2
+3008342,Neutrophils/Leukocytes in Blood by Automated count,13,0.0013,  5.8,,9,2
+3028615,Eosinophils [#/volume] in Blood by Automated count,13,0.0013,  5.8,,9,2
+3037511,Lymphocytes/Leukocytes in Blood by Automated count,13,0.0013,  5.8,,9,2
+3004327,Lymphocytes [#/volume] in Blood by Automated count,13,0.0013,  5.8,,9,2
+3013429,Basophils [#/volume] in Blood by Automated count,13,0.0013,  5.8,,9,2
+3033575,Monocytes [#/volume] in Blood by Automated count,13,0.0013,  5.8,,9,3
+3661627,Serum metabolic panel,12,0.0012,  1.0,,9,9
+36203183,Lymph nodes with isolated tumor cells [#] in Cancer specimen by Light microscopy,12,0.0012,  1.0,,9,9
+4164977,Health assessment questionnaire,11,0.0011,  1.0,,9,9
+40483383,Canadian Study of Health and Aging clinical frailty scale,11,0.0011,  1.0,,9,9
+3000481,Estrogen+Progesterone receptor Ag [Presence] in Tissue by Immune stain,10,0.0010,  1.0,,9,9
+3008598,Thyroxine (T4) free [Mass/volume] in Serum or Plasma,6,0.0006,  1.0,,9,9
+3007461,Platelets [#/volume] in Blood,5,0.0005,  1.0,,9,9
+3028833,Bilirubin.total [Mass/volume] in Blood,5,0.0005,  1.0,,9,9
+3026361,Erythrocytes [#/volume] in Blood,5,0.0005,  1.0,,9,9
+3024731,MCV [Entitic mean volume] in Red Blood Cells,5,0.0005,  1.0,,9,10
+3002385,Erythrocyte [DistWidth] in Blood,5,0.0005,  1.0,,9,10
+3045716,Anion gap in Serum or Plasma by calculation,5,0.0005,  1.0,,10,10
+3010813,Leukocytes [#/volume] in Blood,5,0.0005,  1.0,,10,10
+21494966,Physical findings of Abdomen by Palpation,5,0.0005,  1.0,,10,10
+36203174,Lymph nodes with macrometastases [#] in Cancer specimen by Light microscopy,4,0.0004,  1.0,,10,10
+36203175,Lymph nodes with micrometastases [#] in Cancer specimen by Light microscopy,3,0.0003,  1.0,,10,10
+3661905,Comprehensive metabolic panel,3,0.0003,  1.0,,10,10
+4131386,Hepatitis C screening,2,0.0002,  1.0,,10,10
+3013906,HIV 1 Ab [Presence] in Serum,2,0.0002,  1.0,,10,10
+4064905,Venereal disease screening,2,0.0002,  1.0,,10,10
+4064904,Hepatitis B screening,2,0.0002,  1.0,,10,10
+4064903,HIV screening,2,0.0002,  1.0,,10,10
+4062637,Tuberculosis screening,2,0.0002,  1.0,,10,10
+4062501,Asthma screening,2,0.0002,  1.0,,10,10
+4055982,Sputum microscopy,2,0.0002,  1.0,,10,10
+4055285,Urine pregnancy test,2,0.0002,  1.0,,10,10
+40490396,HIV 1 genotyping,2,0.0002,  1.0,,10,10
+4222728,Hepatitis A virus measurement,2,0.0002,  1.0,,10,10
+4260766,Viral hepatitis screening test,2,0.0002,  1.0,,10,10
+4018589,Serologic test for Toxoplasma gondii,2,0.0002,  1.0,,10,10
+4012477,Glucose tolerance test,1,0.0001,  2.0,,10,5
+4015189,Microbial culture of sputum,1,0.0001,  8.0,,10,2
+3024717,Tumor marker Cancer,1,0.0001,  1.0,,10,10

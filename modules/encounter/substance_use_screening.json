@@ -1,0 +1,313 @@
+{
+  "name": "Substance Use Screening (profile-driven)",
+  "gmf_version": 2,
+  "remarks": [
+    "Replaces the built-in screener: adults only; scores depend on the concurrent_disorders profile attributes; never creates diagnoses."
+  ],
+  "states": {
+    "Initial": {
+      "type": "Initial",
+      "conditional_transition": [
+        {
+          "condition": {
+            "condition_type": "Or",
+            "conditions": [
+              {
+                "condition_type": "Age",
+                "operator": "<",
+                "quantity": 18,
+                "unit": "years"
+              },
+              {
+                "condition_type": "Attribute",
+                "attribute": "pregnant",
+                "operator": "==",
+                "value": true
+              }
+            ]
+          },
+          "transition": "Terminal"
+        },
+        {
+          "transition": "Sub_Proc"
+        }
+      ]
+    },
+    "Sub_Proc": {
+      "type": "Procedure",
+      "codes": [
+        {
+          "system": "SNOMED-CT",
+          "code": "428211000124100",
+          "display": "Assessment of substance use (procedure)"
+        }
+      ],
+      "distribution": {
+        "kind": "UNIFORM",
+        "parameters": {
+          "low": 15,
+          "high": 30
+        }
+      },
+      "unit": "minutes",
+      "direct_transition": "AUDITC_Proc"
+    },
+    "AUDITC_Proc": {
+      "type": "Procedure",
+      "codes": [
+        {
+          "system": "SNOMED-CT",
+          "code": "763302001",
+          "display": "Assessment using Alcohol Use Disorders Identification Test - Consumption (procedure)"
+        }
+      ],
+      "distribution": {
+        "kind": "UNIFORM",
+        "parameters": {
+          "low": 15,
+          "high": 30
+        }
+      },
+      "unit": "minutes",
+      "direct_transition": "AUDITC_Score"
+    },
+    "auditc_score_0": {
+      "type": "SetAttribute",
+      "attribute": "auditc_score",
+      "distribution": {
+        "kind": "UNIFORM",
+        "round": true,
+        "parameters": {
+          "low": 4,
+          "high": 12
+        }
+      },
+      "direct_transition": "AUDITC_Report"
+    },
+    "auditc_score_1": {
+      "type": "SetAttribute",
+      "attribute": "auditc_score",
+      "distribution": {
+        "kind": "UNIFORM",
+        "round": true,
+        "parameters": {
+          "low": 5,
+          "high": 12
+        }
+      },
+      "direct_transition": "AUDITC_Report"
+    },
+    "auditc_score_2": {
+      "type": "SetAttribute",
+      "attribute": "auditc_score",
+      "distribution": {
+        "kind": "UNIFORM",
+        "round": true,
+        "parameters": {
+          "low": 0,
+          "high": 2
+        }
+      },
+      "direct_transition": "AUDITC_Report"
+    },
+    "auditc_score_default": {
+      "type": "SetAttribute",
+      "attribute": "auditc_score",
+      "distribution": {
+        "kind": "UNIFORM",
+        "round": true,
+        "parameters": {
+          "low": 0,
+          "high": 3
+        }
+      },
+      "direct_transition": "AUDITC_Report"
+    },
+    "AUDITC_Score": {
+      "type": "Simple",
+      "conditional_transition": [
+        {
+          "condition": {
+            "condition_type": "And",
+            "conditions": [
+              {
+                "condition_type": "Attribute",
+                "attribute": "cd_sud_alcohol",
+                "operator": "==",
+                "value": true
+              },
+              {
+                "condition_type": "Gender",
+                "gender": "F"
+              }
+            ]
+          },
+          "transition": "auditc_score_0"
+        },
+        {
+          "condition": {
+            "condition_type": "Attribute",
+            "attribute": "cd_sud_alcohol",
+            "operator": "==",
+            "value": true
+          },
+          "transition": "auditc_score_1"
+        },
+        {
+          "condition": {
+            "condition_type": "Gender",
+            "gender": "F"
+          },
+          "transition": "auditc_score_2"
+        },
+        {
+          "transition": "auditc_score_default"
+        }
+      ]
+    },
+    "AUDITC_Report": {
+      "type": "DiagnosticReport",
+      "codes": [
+        {
+          "system": "LOINC",
+          "code": "72109-2",
+          "display": "Alcohol Use Disorder Identification Test - Consumption [AUDIT-C]"
+        }
+      ],
+      "observations": [
+        {
+          "category": "survey",
+          "unit": "{score}",
+          "codes": [
+            {
+              "system": "LOINC",
+              "code": "75626-2",
+              "display": "Total score [AUDIT-C]"
+            }
+          ],
+          "attribute": "auditc_score"
+        }
+      ],
+      "direct_transition": "DAST_Proc"
+    },
+    "DAST_Proc": {
+      "type": "Procedure",
+      "codes": [
+        {
+          "system": "SNOMED-CT",
+          "code": "713106006",
+          "display": "Screening for drug abuse (procedure)"
+        }
+      ],
+      "distribution": {
+        "kind": "UNIFORM",
+        "parameters": {
+          "low": 15,
+          "high": 30
+        }
+      },
+      "unit": "minutes",
+      "direct_transition": "DAST_Score"
+    },
+    "dast_score_0": {
+      "type": "SetAttribute",
+      "attribute": "dast_score",
+      "distribution": {
+        "kind": "UNIFORM",
+        "round": true,
+        "parameters": {
+          "low": 3,
+          "high": 10
+        }
+      },
+      "direct_transition": "DAST_Report"
+    },
+    "dast_score_default": {
+      "type": "SetAttribute",
+      "attribute": "dast_score",
+      "distribution": {
+        "kind": "UNIFORM",
+        "round": true,
+        "parameters": {
+          "low": 0,
+          "high": 2
+        }
+      },
+      "direct_transition": "DAST_Report"
+    },
+    "DAST_Score": {
+      "type": "Simple",
+      "conditional_transition": [
+        {
+          "condition": {
+            "condition_type": "Or",
+            "conditions": [
+              {
+                "condition_type": "Attribute",
+                "attribute": "cd_sud_cannabis",
+                "operator": "==",
+                "value": true
+              },
+              {
+                "condition_type": "Attribute",
+                "attribute": "cd_sud_opioid",
+                "operator": "==",
+                "value": true
+              },
+              {
+                "condition_type": "Attribute",
+                "attribute": "cd_sud_cocaine",
+                "operator": "==",
+                "value": true
+              },
+              {
+                "condition_type": "Attribute",
+                "attribute": "cd_sud_methamphetamine",
+                "operator": "==",
+                "value": true
+              },
+              {
+                "condition_type": "Attribute",
+                "attribute": "cd_sud_other_drug",
+                "operator": "==",
+                "value": true
+              }
+            ]
+          },
+          "transition": "dast_score_0"
+        },
+        {
+          "transition": "dast_score_default"
+        }
+      ]
+    },
+    "DAST_Report": {
+      "type": "DiagnosticReport",
+      "codes": [
+        {
+          "system": "LOINC",
+          "code": "82666-9",
+          "display": "Drug Abuse Screening Test-10 [DAST-10]"
+        }
+      ],
+      "observations": [
+        {
+          "category": "survey",
+          "unit": "{score}",
+          "codes": [
+            {
+              "system": "LOINC",
+              "code": "82667-7",
+              "display": "Total score [DAST-10]"
+            }
+          ],
+          "attribute": "dast_score"
+        }
+      ],
+      "direct_transition": "Terminal"
+    },
+    "Terminal": {
+      "type": "Terminal"
+    }
+  }
+}

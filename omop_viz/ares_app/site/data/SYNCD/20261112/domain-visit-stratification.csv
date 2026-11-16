@@ -1,0 +1,25 @@
+CONCEPT_ID,CONCEPT_NAME,CDM_TABLE_NAME,RECORD_COUNT
+0,No matching concept,observation,149325
+9203,Emergency Room Visit,procedure_occurrence,5531
+9201,Inpatient Visit,observation,402
+9202,Outpatient Visit,condition_occurrence,77097
+9203,Emergency Room Visit,drug_exposure,9459
+9203,Emergency Room Visit,observation,28320
+9201,Inpatient Visit,condition_occurrence,1932
+9201,Inpatient Visit,measurement,59549
+9202,Outpatient Visit,procedure_occurrence,137930
+9202,Outpatient Visit,device_exposure,9881
+0,No matching concept,measurement,286615
+9203,Emergency Room Visit,measurement,66153
+9202,Outpatient Visit,measurement,1075563
+9202,Outpatient Visit,observation,696750
+0,No matching concept,procedure_occurrence,20170
+9203,Emergency Room Visit,condition_occurrence,4811
+9203,Emergency Room Visit,device_exposure,840
+0,No matching concept,drug_exposure,26536
+9201,Inpatient Visit,procedure_occurrence,6973
+9201,Inpatient Visit,device_exposure,1783
+0,No matching concept,device_exposure,950
+9202,Outpatient Visit,drug_exposure,140137
+9201,Inpatient Visit,drug_exposure,9396
+0,No matching concept,condition_occurrence,3740

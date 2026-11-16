@@ -1,0 +1,202 @@
+{
+  "source": "NSDUH 2024 Public Use File (NSDUH-2024-DS0001), SAMHSA",
+  "definitions": {
+    "mh": "AMIPY == 1",
+    "sud": "UD5ILALANY == 1",
+    "both_crosscheck": "AMISUD5ANY == 1 (identical by construction)"
+  },
+  "min_cell_n": 30,
+  "age_groups": {
+    "18-25": [
+      18,
+      25
+    ],
+    "26-34": [
+      26,
+      34
+    ],
+    "35-49": [
+      35,
+      49
+    ],
+    "50-64": [
+      50,
+      64
+    ],
+    "65+": [
+      65,
+      200
+    ]
+  },
+  "joint_by_stratum": {
+    "18-25|F": {
+      "neither": 0.5171019970376688,
+      "mh_only": 0.23833601636275845,
+      "sud_only": 0.09246631884816772,
+      "both": 0.15209566775140504
+    },
+    "18-25|M": {
+      "neither": 0.552536289771263,
+      "mh_only": 0.16830831594204748,
+      "sud_only": 0.16135726189444122,
+      "both": 0.1177981323922482
+    },
+    "26-34|F": {
+      "neither": 0.5438856985637487,
+      "mh_only": 0.256079257473683,
+      "sud_only": 0.06634045962841421,
+      "both": 0.13369458433415404
+    },
+    "26-34|M": {
+      "neither": 0.5515583480596139,
+      "mh_only": 0.15665571548192156,
+      "sud_only": 0.15194427266356983,
+      "both": 0.1398416637948947
+    },
+    "35-49|F": {
+      "neither": 0.626660847183279,
+      "mh_only": 0.21730095294868662,
+      "sud_only": 0.06718714071944719,
+      "both": 0.08885105914858732
+    },
+    "35-49|M": {
+      "neither": 0.6188029405339164,
+      "mh_only": 0.12764831077330577,
+      "sud_only": 0.14656431722668425,
+      "both": 0.10698443146609361
+    },
+    "50-64|F": {
+      "neither": 0.7159807354118486,
+      "mh_only": 0.16955621392257605,
+      "sud_only": 0.06579162872125274,
+      "both": 0.04867142194432248
+    },
+    "50-64|M": {
+      "neither": 0.7166468362875079,
+      "mh_only": 0.1068348780284072,
+      "sud_only": 0.12877400134257977,
+      "both": 0.04774428434150507
+    },
+    "65+|F": {
+      "neither": 0.8253974253135266,
+      "mh_only": 0.10203037631361746,
+      "sud_only": 0.045123348289089885,
+      "both": 0.027448850083766158
+    },
+    "65+|M": {
+      "neither": 0.8282384540249312,
+      "mh_only": 0.0738101500524769,
+      "sud_only": 0.07416237628839895,
+      "both": 0.023789019634192898
+    }
+  },
+  "joint_overall": {
+    "neither": 0.667817498037858,
+    "mh_only": 0.1550339231420614,
+    "sud_only": 0.09631503153198022,
+    "both": 0.08083354728810035
+  },
+  "marginals": {
+    "mh": {
+      "p": 0.23586747043016176,
+      "se": 0.0038445385239665873
+    },
+    "sud": {
+      "p": 0.1771485788200806,
+      "se": 0.0030100047772004894
+    },
+    "p_sud_given_mh": 0.34270748374364934,
+    "p_mh_given_sud": 0.45630367359705576,
+    "independence_product_mh_x_sud": 0.04178358717659054,
+    "observed_both": 0.08083354728810035
+  },
+  "p_mde_given_mh": {
+    "with_sud": 0.4215945954550219,
+    "without_sud": 0.3077682822697506
+  },
+  "mi_severity_given_mh": {
+    "with_sud": {
+      "mild": 0.38698816763106464,
+      "moderate": 0.29346005182451923,
+      "serious": 0.3195517805444162
+    },
+    "without_sud": {
+      "mild": 0.5387868379445458,
+      "moderate": 0.26631368895393787,
+      "serious": 0.19489947310151642
+    }
+  },
+  "sud_pattern_given_sud": {
+    "with_mh": {
+      "alcohol": 0.3329572610145917,
+      "alcohol+cannabis": 0.14335178826855088,
+      "alcohol+cannabis+cocaine": 0.005157300638057842,
+      "alcohol+cannabis+methamphetamine": 0.004802622352037689,
+      "alcohol+cannabis+opioid": 0.011112145709620375,
+      "alcohol+cocaine": 0.00895347833118004,
+      "alcohol+opioid": 0.018912566675874206,
+      "cannabis": 0.2977155357128284,
+      "cannabis+methamphetamine": 0.005413990969116848,
+      "cannabis+opioid": 0.020950433425369706,
+      "cocaine": 0.005319196769006686,
+      "methamphetamine": 0.019883905893208514,
+      "opioid": 0.07144278901464154,
+      "opioid+methamphetamine": 0.006375988682818536,
+      "other_drug": 0.047650996543097165
+    },
+    "without_mh": {
+      "alcohol": 0.5338131933439858,
+      "alcohol+cannabis": 0.08118888639774596,
+      "alcohol+cannabis+cocaine": 0.0034868291639321386,
+      "alcohol+cannabis+methamphetamine": 0.0025619118368696288,
+      "alcohol+cannabis+opioid": 0.0037788864360744287,
+      "alcohol+cocaine": 0.004578545022596326,
+      "alcohol+opioid": 0.003588934800943823,
+      "cannabis": 0.25901191257579564,
+      "cannabis+methamphetamine": 0.004519149288703987,
+      "cannabis+opioid": 0.006156269213779226,
+      "cocaine": 0.0035054819012739304,
+      "methamphetamine": 0.014232951576488632,
+      "opioid": 0.051849829319014495,
+      "opioid+methamphetamine": 0.0018770240828579067,
+      "other_drug": 0.025850195039937903
+    }
+  },
+  "sud_pattern_collapse_map": {
+    "cannabis+cocaine": "cannabis",
+    "alcohol+methamphetamine": "alcohol",
+    "alcohol+cannabis+opioid+cocaine": "alcohol+cannabis+opioid",
+    "cannabis+opioid+methamphetamine": "cannabis+opioid",
+    "alcohol+opioid+cocaine": "alcohol+opioid",
+    "opioid+cocaine": "opioid",
+    "cannabis+opioid+cocaine": "cannabis+opioid",
+    "alcohol+cannabis+opioid+methamphetamine": "alcohol+cannabis+opioid",
+    "alcohol+opioid+methamphetamine": "alcohol+opioid",
+    "opioid+methamphetamine+cocaine": "opioid+methamphetamine",
+    "alcohol+cannabis+opioid+methamphetamine+cocaine": "alcohol+cannabis+opioid+methamphetamine",
+    "alcohol+cannabis+methamphetamine+cocaine": "alcohol+cannabis+methamphetamine",
+    "cannabis+opioid+methamphetamine+cocaine": "cannabis+opioid+methamphetamine",
+    "alcohol+methamphetamine+cocaine": "alcohol+methamphetamine",
+    "alcohol+opioid+methamphetamine+cocaine": "alcohol+opioid+methamphetamine",
+    "methamphetamine+cocaine": "methamphetamine",
+    "cannabis+methamphetamine+cocaine": "cannabis+methamphetamine"
+  },
+  "treatment_by_group": {
+    "neither": {
+      "mh_tx": 0.1297944620930361,
+      "sud_tx": 0.01140829945809099
+    },
+    "mh_only": {
+      "mh_tx": 0.5054841305348287,
+      "sud_tx": 0.044320095966591234
+    },
+    "sud_only": {
+      "mh_tx": 0.20562216519031978,
+      "sud_tx": 0.0674508904259858
+    },
+    "both": {
+      "mh_tx": 0.5551801793164733,
+      "sud_tx": 0.17432695025171713
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "index_delay_days": [
+    0,
+    365
+  ],
+  "second_dx_delay_days": [
+    7,
+    90
+  ],
+  "p_mh_first_in_both": 0.5,
+  "detection_probability_untreated": 1.0,
+  "mh_dx_rule": "AMI + past-year MDE -> Major depressive disorder; AMI without MDE -> Anxiety disorder (assumption: anxiety disorders are the most prevalent non-MDE mental illness in U.S. adults)",
+  "mh_treated_modality": {
+    "ssri_only": 0.4,
+    "psychotherapy_only": 0.35,
+    "both": 0.25
+  },
+  "aud_treated_naltrexone": 0.5,
+  "oud_treated_buprenorphine": 1.0,
+  "follow_up_visits_if_treated": 3,
+  "follow_up_interval_days": [
+    28,
+    90
+  ],
+  "disorders_remain_active_through_end_of_window": true,
+  "mh_tx_only_for_mh_dx_and_sud_tx_only_for_sud_dx": true
+}

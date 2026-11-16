@@ -1,0 +1,21 @@
+# Too large for git or not ours to redistribute. See README "Getting the data".
+source_data/athena_vocab/
+source_data/nsduh_2024/NSDUH_2024_Tab.txt
+tools/*.jar
+output/*/csv/
+output/*/x12/
+output/pilot_1000/
+omop_viz/sample_data_removed/
+omop_viz/ares_app/*.zip
+omop_load/jdbc/
+
+# Local logs (contain machine paths)
+*.log
+omop_viz/achilles_logs/
+omop_viz/ares_app/site/data/**/log_*.txt
+output/*/metadata/
+
+.DS_Store
+__pycache__/
+*.pyc
+.Rhistory

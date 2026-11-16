@@ -1,0 +1,26 @@
+CONCEPT_ID,CONCEPT_NAME,NUM_PERSONS,PERCENT_PERSONS,RECORDS_PER_PERSON,PERCENT_PERSONS_NTILE,RECORDS_PER_PERSON_NTILE
+4224372,Glucometer,5139,0.5139,1.0,1,3
+4015740,Home nebulizer,2528,0.2528,1.0,1,3
+4045112,Manual wheelchair,1132,0.1132,1.1,1,2
+45767832,Wheelchair accessory,647,0.0647,1.0,2,3
+45768203,Respiratory humidifier,427,0.0427,2.7,2,1
+45765273,Home CPAP unit,427,0.0427,2.7,2,1
+45764420,Polysomnography analyzer,373,0.0373,1.0,3,4
+45764401,Respiratory apnea monitoring system,373,0.0373,1.0,3,4
+4159828,Appliance for sleep apnea,123,0.0123,2.6,3,1
+45767840,Power-assisted wheelchair,117,0.0117,1.0,4,4
+4222968,Oxygen concentrator,94,0.0094,1.3,4,2
+4251933,Crutch,56,0.0056,1.0,4,5
+4129104,Portable oxygen cylinder,47,0.0047,1.3,5,2
+3661561,Aortic valve bioprosthesis,36,0.0036,1.0,5,5
+45768176,Patient lifting system,24,0.0024,1.0,5,5
+4232649,Commode,23,0.0023,1.0,6,6
+4044874,Intra-aortic balloon pump,20,0.0020,1.0,6,6
+45759110,Portable oxygen concentrator,17,0.0017,1.0,7,7
+4235043,Ventricular assist device,10,0.0010,1.0,7,7
+45768116,Mechanical cardiac valve prosthesis,7,0.0007,1.0,8,8
+36714850,Home-use sleep apnea recording system,7,0.0007,1.0,8,8
+4235161,Left ventricular assist device,1,0.0001,1.0,9,9
+40493026,Mechanical ventilator,1,0.0001,1.0,9,9
+40492457,Videolaryngoscope,1,0.0001,1.0,10,10
+45772840,Implantable cardiac pacemaker,1,0.0001,1.0,10,10

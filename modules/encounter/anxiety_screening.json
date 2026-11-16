@@ -1,0 +1,226 @@
+{
+  "name": "Anxiety Screening (profile-driven)",
+  "gmf_version": 2,
+  "remarks": [
+    "Replaces the built-in screener: adults only; scores depend on the concurrent_disorders profile attributes; never creates diagnoses."
+  ],
+  "states": {
+    "Initial": {
+      "type": "Initial",
+      "conditional_transition": [
+        {
+          "condition": {
+            "condition_type": "Or",
+            "conditions": [
+              {
+                "condition_type": "Age",
+                "operator": "<",
+                "quantity": 18,
+                "unit": "years"
+              },
+              {
+                "condition_type": "Attribute",
+                "attribute": "pregnant",
+                "operator": "==",
+                "value": true
+              }
+            ]
+          },
+          "transition": "Terminal"
+        },
+        {
+          "transition": "GAD7_Proc"
+        }
+      ]
+    },
+    "GAD7_Proc": {
+      "type": "Procedure",
+      "codes": [
+        {
+          "system": "SNOMED-CT",
+          "code": "710841007",
+          "display": "Assessment of anxiety (procedure)"
+        }
+      ],
+      "distribution": {
+        "kind": "UNIFORM",
+        "parameters": {
+          "low": 15,
+          "high": 30
+        }
+      },
+      "unit": "minutes",
+      "direct_transition": "GAD7_Score"
+    },
+    "gad7_score_0": {
+      "type": "SetAttribute",
+      "attribute": "anxiety_screening_score",
+      "distribution": {
+        "kind": "UNIFORM",
+        "round": true,
+        "parameters": {
+          "low": 10,
+          "high": 14
+        }
+      },
+      "direct_transition": "GAD7_Report"
+    },
+    "gad7_score_1": {
+      "type": "SetAttribute",
+      "attribute": "anxiety_screening_score",
+      "distribution": {
+        "kind": "UNIFORM",
+        "round": true,
+        "parameters": {
+          "low": 15,
+          "high": 17
+        }
+      },
+      "direct_transition": "GAD7_Report"
+    },
+    "gad7_score_2": {
+      "type": "SetAttribute",
+      "attribute": "anxiety_screening_score",
+      "distribution": {
+        "kind": "UNIFORM",
+        "round": true,
+        "parameters": {
+          "low": 18,
+          "high": 21
+        }
+      },
+      "direct_transition": "GAD7_Report"
+    },
+    "gad7_score_3": {
+      "type": "SetAttribute",
+      "attribute": "anxiety_screening_score",
+      "distribution": {
+        "kind": "UNIFORM",
+        "round": true,
+        "parameters": {
+          "low": 5,
+          "high": 12
+        }
+      },
+      "direct_transition": "GAD7_Report"
+    },
+    "gad7_score_default": {
+      "type": "SetAttribute",
+      "attribute": "anxiety_screening_score",
+      "distribution": {
+        "kind": "UNIFORM",
+        "round": true,
+        "parameters": {
+          "low": 0,
+          "high": 4
+        }
+      },
+      "direct_transition": "GAD7_Report"
+    },
+    "GAD7_Score": {
+      "type": "Simple",
+      "conditional_transition": [
+        {
+          "condition": {
+            "condition_type": "And",
+            "conditions": [
+              {
+                "condition_type": "Attribute",
+                "attribute": "cd_mh_dx",
+                "operator": "==",
+                "value": "anxiety"
+              },
+              {
+                "condition_type": "Attribute",
+                "attribute": "cd_mi_severity",
+                "operator": "==",
+                "value": "mild"
+              }
+            ]
+          },
+          "transition": "gad7_score_0"
+        },
+        {
+          "condition": {
+            "condition_type": "And",
+            "conditions": [
+              {
+                "condition_type": "Attribute",
+                "attribute": "cd_mh_dx",
+                "operator": "==",
+                "value": "anxiety"
+              },
+              {
+                "condition_type": "Attribute",
+                "attribute": "cd_mi_severity",
+                "operator": "==",
+                "value": "moderate"
+              }
+            ]
+          },
+          "transition": "gad7_score_1"
+        },
+        {
+          "condition": {
+            "condition_type": "And",
+            "conditions": [
+              {
+                "condition_type": "Attribute",
+                "attribute": "cd_mh_dx",
+                "operator": "==",
+                "value": "anxiety"
+              },
+              {
+                "condition_type": "Attribute",
+                "attribute": "cd_mi_severity",
+                "operator": "==",
+                "value": "serious"
+              }
+            ]
+          },
+          "transition": "gad7_score_2"
+        },
+        {
+          "condition": {
+            "condition_type": "Attribute",
+            "attribute": "cd_mh_dx",
+            "operator": "==",
+            "value": "mdd"
+          },
+          "transition": "gad7_score_3"
+        },
+        {
+          "transition": "gad7_score_default"
+        }
+      ]
+    },
+    "GAD7_Report": {
+      "type": "DiagnosticReport",
+      "codes": [
+        {
+          "system": "LOINC",
+          "code": "69737-5",
+          "display": "Generalized anxiety disorder 7 item (GAD-7)"
+        }
+      ],
+      "observations": [
+        {
+          "category": "survey",
+          "unit": "{score}",
+          "codes": [
+            {
+              "system": "LOINC",
+              "code": "70274-6",
+              "display": "Generalized anxiety disorder 7 item (GAD-7) total score [Reported.PHQ]"
+            }
+          ],
+          "attribute": "anxiety_screening_score"
+        }
+      ],
+      "direct_transition": "Terminal"
+    },
+    "Terminal": {
+      "type": "Terminal"
+    }
+  }
+}

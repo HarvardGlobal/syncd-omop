@@ -1,0 +1,16 @@
+{
+  "name": "veteran_mdd (disabled)",
+  "gmf_version": 2,
+  "remarks": [
+    "Disabled: would create MH/SUD diagnoses outside the NSDUH calibration."
+  ],
+  "states": {
+    "Initial": {
+      "type": "Initial",
+      "direct_transition": "Terminal"
+    },
+    "Terminal": {
+      "type": "Terminal"
+    }
+  }
+}

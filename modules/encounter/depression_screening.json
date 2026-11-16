@@ -1,0 +1,348 @@
+{
+  "name": "Depression Screening (profile-driven)",
+  "gmf_version": 2,
+  "remarks": [
+    "Replaces the built-in screener: adults only; scores depend on the concurrent_disorders profile attributes; never creates diagnoses."
+  ],
+  "states": {
+    "Initial": {
+      "type": "Initial",
+      "conditional_transition": [
+        {
+          "condition": {
+            "condition_type": "Or",
+            "conditions": [
+              {
+                "condition_type": "Age",
+                "operator": "<",
+                "quantity": 18,
+                "unit": "years"
+              },
+              {
+                "condition_type": "Attribute",
+                "attribute": "pregnant",
+                "operator": "==",
+                "value": true
+              }
+            ]
+          },
+          "transition": "Terminal"
+        },
+        {
+          "transition": "PHQ2_Proc"
+        }
+      ]
+    },
+    "PHQ2_Proc": {
+      "type": "Procedure",
+      "codes": [
+        {
+          "system": "SNOMED-CT",
+          "code": "454711000124102",
+          "display": "Depression screening using Patient Health Questionnaire Two-Item score (procedure)"
+        }
+      ],
+      "distribution": {
+        "kind": "UNIFORM",
+        "parameters": {
+          "low": 15,
+          "high": 30
+        }
+      },
+      "unit": "minutes",
+      "direct_transition": "PHQ2_Score"
+    },
+    "phq2_score_0": {
+      "type": "SetAttribute",
+      "attribute": "phq2_score",
+      "distribution": {
+        "kind": "UNIFORM",
+        "round": true,
+        "parameters": {
+          "low": 3,
+          "high": 6
+        }
+      },
+      "direct_transition": "PHQ2_Report"
+    },
+    "phq2_score_1": {
+      "type": "SetAttribute",
+      "attribute": "phq2_score",
+      "distribution": {
+        "kind": "UNIFORM",
+        "round": true,
+        "parameters": {
+          "low": 1,
+          "high": 3
+        }
+      },
+      "direct_transition": "PHQ2_Report"
+    },
+    "phq2_score_default": {
+      "type": "SetAttribute",
+      "attribute": "phq2_score",
+      "distribution": {
+        "kind": "UNIFORM",
+        "round": true,
+        "parameters": {
+          "low": 0,
+          "high": 2
+        }
+      },
+      "direct_transition": "PHQ2_Report"
+    },
+    "PHQ2_Score": {
+      "type": "Simple",
+      "conditional_transition": [
+        {
+          "condition": {
+            "condition_type": "Attribute",
+            "attribute": "cd_mh_dx",
+            "operator": "==",
+            "value": "mdd"
+          },
+          "transition": "phq2_score_0"
+        },
+        {
+          "condition": {
+            "condition_type": "Attribute",
+            "attribute": "cd_mh_dx",
+            "operator": "==",
+            "value": "anxiety"
+          },
+          "transition": "phq2_score_1"
+        },
+        {
+          "transition": "phq2_score_default"
+        }
+      ]
+    },
+    "PHQ2_Report": {
+      "type": "DiagnosticReport",
+      "codes": [
+        {
+          "system": "LOINC",
+          "code": "55757-9",
+          "display": "Patient Health Questionnaire 2 item (PHQ-2) [Reported]"
+        }
+      ],
+      "observations": [
+        {
+          "category": "survey",
+          "unit": "{score}",
+          "codes": [
+            {
+              "system": "LOINC",
+              "code": "55758-7",
+              "display": "Patient Health Questionnaire 2 item (PHQ-2) total score [Reported]"
+            }
+          ],
+          "attribute": "phq2_score"
+        }
+      ],
+      "conditional_transition": [
+        {
+          "condition": {
+            "condition_type": "Attribute",
+            "attribute": "phq2_score",
+            "operator": ">=",
+            "value": 3
+          },
+          "transition": "PHQ9_Proc"
+        },
+        {
+          "transition": "Terminal"
+        }
+      ]
+    },
+    "PHQ9_Proc": {
+      "type": "Procedure",
+      "codes": [
+        {
+          "system": "SNOMED-CT",
+          "code": "715252007",
+          "display": "Depression screening using Patient Health Questionnaire Nine Item score (procedure)"
+        }
+      ],
+      "distribution": {
+        "kind": "UNIFORM",
+        "parameters": {
+          "low": 15,
+          "high": 30
+        }
+      },
+      "unit": "minutes",
+      "direct_transition": "PHQ9_Score"
+    },
+    "phq9_score_0": {
+      "type": "SetAttribute",
+      "attribute": "phqa_score",
+      "distribution": {
+        "kind": "UNIFORM",
+        "round": true,
+        "parameters": {
+          "low": 10,
+          "high": 14
+        }
+      },
+      "direct_transition": "PHQ9_Report"
+    },
+    "phq9_score_1": {
+      "type": "SetAttribute",
+      "attribute": "phqa_score",
+      "distribution": {
+        "kind": "UNIFORM",
+        "round": true,
+        "parameters": {
+          "low": 15,
+          "high": 19
+        }
+      },
+      "direct_transition": "PHQ9_Report"
+    },
+    "phq9_score_2": {
+      "type": "SetAttribute",
+      "attribute": "phqa_score",
+      "distribution": {
+        "kind": "UNIFORM",
+        "round": true,
+        "parameters": {
+          "low": 20,
+          "high": 27
+        }
+      },
+      "direct_transition": "PHQ9_Report"
+    },
+    "phq9_score_3": {
+      "type": "SetAttribute",
+      "attribute": "phqa_score",
+      "distribution": {
+        "kind": "UNIFORM",
+        "round": true,
+        "parameters": {
+          "low": 5,
+          "high": 12
+        }
+      },
+      "direct_transition": "PHQ9_Report"
+    },
+    "phq9_score_default": {
+      "type": "SetAttribute",
+      "attribute": "phqa_score",
+      "distribution": {
+        "kind": "UNIFORM",
+        "round": true,
+        "parameters": {
+          "low": 3,
+          "high": 9
+        }
+      },
+      "direct_transition": "PHQ9_Report"
+    },
+    "PHQ9_Score": {
+      "type": "Simple",
+      "conditional_transition": [
+        {
+          "condition": {
+            "condition_type": "And",
+            "conditions": [
+              {
+                "condition_type": "Attribute",
+                "attribute": "cd_mh_dx",
+                "operator": "==",
+                "value": "mdd"
+              },
+              {
+                "condition_type": "Attribute",
+                "attribute": "cd_mi_severity",
+                "operator": "==",
+                "value": "mild"
+              }
+            ]
+          },
+          "transition": "phq9_score_0"
+        },
+        {
+          "condition": {
+            "condition_type": "And",
+            "conditions": [
+              {
+                "condition_type": "Attribute",
+                "attribute": "cd_mh_dx",
+                "operator": "==",
+                "value": "mdd"
+              },
+              {
+                "condition_type": "Attribute",
+                "attribute": "cd_mi_severity",
+                "operator": "==",
+                "value": "moderate"
+              }
+            ]
+          },
+          "transition": "phq9_score_1"
+        },
+        {
+          "condition": {
+            "condition_type": "And",
+            "conditions": [
+              {
+                "condition_type": "Attribute",
+                "attribute": "cd_mh_dx",
+                "operator": "==",
+                "value": "mdd"
+              },
+              {
+                "condition_type": "Attribute",
+                "attribute": "cd_mi_severity",
+                "operator": "==",
+                "value": "serious"
+              }
+            ]
+          },
+          "transition": "phq9_score_2"
+        },
+        {
+          "condition": {
+            "condition_type": "Attribute",
+            "attribute": "cd_mh_dx",
+            "operator": "==",
+            "value": "anxiety"
+          },
+          "transition": "phq9_score_3"
+        },
+        {
+          "transition": "phq9_score_default"
+        }
+      ]
+    },
+    "PHQ9_Report": {
+      "type": "DiagnosticReport",
+      "codes": [
+        {
+          "system": "LOINC",
+          "code": "44249-1",
+          "display": "PHQ-9 quick depression assessment panel [Reported.PHQ]"
+        }
+      ],
+      "observations": [
+        {
+          "category": "survey",
+          "unit": "{score}",
+          "codes": [
+            {
+              "system": "LOINC",
+              "code": "44261-6",
+              "display": "Patient Health Questionnaire 9 item (PHQ-9) total score [Reported]"
+            }
+          ],
+          "attribute": "phqa_score"
+        }
+      ],
+      "direct_transition": "Terminal"
+    },
+    "Terminal": {
+      "type": "Terminal"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+cdm_table_name,count_failed
+cohort,1
+cohort_definition,1
+condition_occurrence,1
+cost,1
+drug_exposure,4
+drug_strength,1
+measurement,1
+observation,2
+observation_period,1
+payer_plan_period,1
+provider,2
+visit_detail,2
+visit_occurrence,2

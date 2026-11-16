@@ -1,0 +1,61 @@
+DBMS:
+postgresql
+
+Error:
+org.postgresql.util.PSQLException: ERROR: relation "results.cohort_definition" does not exist
+  Position: 476
+
+SQL:
+/*********
+FIELD_IS_REQUIRED
+Check that values in fields where isRequired == TRUE are non-null
+Parameters used in this template:
+schema = results
+cdmTableName = COHORT_DEFINITION
+cdmFieldName = SUBJECT_CONCEPT_ID
+**********/
+SELECT 
+    num_violated_rows, 
+    CASE 
+        WHEN denominator.num_rows = 0 THEN 0 
+        ELSE 1.0*num_violated_rows/denominator.num_rows
+    END AS pct_violated_rows, 
+    denominator.num_rows AS num_denominator_rows
+FROM (
+    SELECT 
+        COUNT(violated_rows.violating_field) AS num_violated_rows
+    FROM (
+        /*violatedRowsBegin*/
+        SELECT 
+            'COHORT_DEFINITION.SUBJECT_CONCEPT_ID' AS violating_field, 
+            cdmTable.* 
+        FROM results.COHORT_DEFINITION cdmTable
+        WHERE cdmTable.SUBJECT_CONCEPT_ID IS NULL
+        /*violatedRowsEnd*/
+    ) violated_rows
+) violated_row_count,
+( 
+    SELECT 
+        COUNT(*) AS num_rows
+    FROM results.COHORT_DEFINITION cdmTable
+) denominator
+;
+
+
+R version:
+R version 4.3.0 (2023-04-21)
+
+Platform:
+x86_64-apple-darwin20
+
+Attached base packages:
+- stats
+- graphics
+- grDevices
+- utils
+- datasets
+- methods
+- base
+
+Other attached packages:
+- snow (0.4-4)
