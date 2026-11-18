@@ -1,0 +1,287 @@
+<title>SYNCD Patient Journeys</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column; a journey diagram up top, then four tool sections, then lessons and next steps */
+:root {
+  --bg: #f6f8f9; --surface: #ffffff; --fg: #18232b; --muted: #55656f; --line: #d9e1e5;
+  --accent: #0f6e7a; --accent-soft: #e2f1f2;
+  --mh: #3d63b8; --mh-soft: #e3eaf8; --sud: #b0562a; --sud-soft: #f7e6dc; --tx: #2f7d4f; --tx-soft: #e1f1e7;
+  --good: #2f7d4f; --warn: #8a5a00; --warn-soft: #fbf1dc;
+  --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #11181c; --surface: #172126; --fg: #e4ebee; --muted: #9aaab3; --line: #2a3840;
+  --accent: #5cc3cf; --accent-soft: #163338;
+  --mh: #8aa8ec; --mh-soft: #1c2740; --sud: #e59a72; --sud-soft: #3a2519; --tx: #72c896; --tx-soft: #17301f;
+  --good: #72c896; --warn: #f0c060; --warn-soft: #2e2615; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #11181c; --surface: #172126; --fg: #e4ebee; --muted: #9aaab3; --line: #2a3840;
+  --accent: #5cc3cf; --accent-soft: #163338;
+  --mh: #8aa8ec; --mh-soft: #1c2740; --sud: #e59a72; --sud-soft: #3a2519; --tx: #72c896; --tx-soft: #17301f;
+  --good: #72c896; --warn: #f0c060; --warn-soft: #2e2615; color-scheme: dark }
+
+body { background: var(--bg); color: var(--fg); font: 15.5px/1.6 var(--sans);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+main { max-width: 820px; margin: 0 auto; padding-block: 48px 80px; display: flex; flex-direction: column; gap: 44px; }
+h1, h2, h3 { text-wrap: balance; line-height: 1.25; margin: 0; }
+h1 { font-size: 2rem; font-weight: 700; letter-spacing: -0.01em; }
+h2 { font-size: 1.35rem; font-weight: 600; }
+h3 { font-size: 1.02rem; font-weight: 600; }
+p { margin: 0; max-width: 70ch; }
+ul, ol { margin: 0; padding-left: 1.3em; display: flex; flex-direction: column; gap: 5px; max-width: 70ch; }
+code { font-family: var(--mono); font-size: 0.86em; background: var(--accent-soft); padding: 1px 5px; border-radius: 4px; overflow-wrap: anywhere; }
+.eyebrow { font: 500 0.75rem/1 var(--mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); }
+.lede { color: var(--muted); font-size: 1.05rem; }
+header, section { display: flex; flex-direction: column; gap: 14px; }
+section + section { border-top: 1px solid var(--line); padding-top: 32px; }
+
+.figure { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; overflow-x: auto; }
+.figure svg { display: block; width: 100%; min-width: 620px; height: auto; }
+.figure text { font-family: var(--sans); }
+.caption { color: var(--muted); font-size: 0.88rem; }
+
+.terms { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 10px 22px; }
+.terms div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.terms b { font-weight: 600; }
+.terms span { color: var(--muted); font-size: 0.92rem; }
+
+.levels { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-weight: 600; color: var(--muted); font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.05em; }
+tr:last-child td { border-bottom: none; }
+td.n { text-align: right; font-variant-numeric: tabular-nums; font-family: var(--mono); white-space: nowrap; }
+
+.tool { display: flex; flex-direction: column; gap: 12px; }
+.tool-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; }
+.pill { font: 500 0.74rem/1 var(--sans); padding: 5px 9px; border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; }
+.pill.core { color: var(--good); }
+.pill.niche { color: var(--accent); }
+.pill.demo { color: var(--warn); }
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+.cols > div { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.cols h4 { margin: 0; font: 600 0.78rem/1.2 var(--sans); text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.cols ul { font-size: 0.92rem; }
+.finding { border-left: 3px solid var(--accent); padding: 4px 0 4px 14px; }
+.where { color: var(--muted); font-size: 0.88rem; }
+
+.bars { display: flex; flex-direction: column; gap: 10px; }
+.bar-row { display: grid; grid-template-columns: 170px 1fr; gap: 12px; align-items: center; }
+.bar-row > span { font-size: 0.9rem; }
+.bar { display: flex; height: 22px; border-radius: 4px; overflow: hidden; background: var(--line); }
+.bar i { display: block; height: 100%; }
+.bar .un { background: var(--line); }
+.bar .mh { background: var(--mh); }
+.bar .sud { background: var(--sud); }
+.bar .both { background: var(--tx); }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 0.84rem; color: var(--muted); }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+@media (max-width: 520px) { .bar-row { grid-template-columns: 1fr; gap: 4px; } }
+
+.note { background: var(--warn-soft); border-left: 3px solid var(--warn); padding: 10px 14px; border-radius: 0 6px 6px 0; font-size: 0.93rem; max-width: 70ch; }
+.note b { color: var(--warn); }
+footer { color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--line); padding-top: 18px; }
+</style>
+
+<main>
+<header>
+  <div class="eyebrow">SYNCD · OMOP CDM 5.4 · four open-source tools</div>
+  <h1>Patient journeys in the SYNCD database</h1>
+  <p class="lede">What was built with PatientExploreR, TreatmentPatterns, CohortContrast and Comorbidity4j, what each showed about the 769 people with concurrent mental illness (MH) and substance use disorder (SUD), and how to read a patient journey.</p>
+</header>
+
+<section>
+  <h2>What a patient journey is</h2>
+  <p>A patient journey is the ordered sequence of clinically meaningful events for one person: diagnoses, screenings, treatments and visits, each with a date. In OMOP every event table carries a <code>person_id</code> and a date, so a journey is a person's rows across those tables, sorted by time. Journey analysis asks what happens, in what order, how long it lasts, and how that differs between groups.</p>
+
+  <div class="figure" role="img" aria-label="Schematic journey of one concurrent-disorder patient: anxiety diagnosed first, alcohol use disorder about seven weeks later which sets the index date, sertraline and CBT eras that overlap into a combination, then follow-up screenings until the end of observation.">
+    <svg viewBox="0 0 760 250" xmlns="http://www.w3.org/2000/svg">
+      <!-- lanes -->
+      <text x="0" y="52" font-size="12" fill="var(--muted)">Diagnoses</text>
+      <text x="0" y="112" font-size="12" fill="var(--muted)">Screening</text>
+      <text x="0" y="172" font-size="12" fill="var(--muted)">Treatment</text>
+      <line x1="90" y1="48" x2="750" y2="48" stroke="var(--line)" stroke-width="1"/>
+      <line x1="90" y1="108" x2="750" y2="108" stroke="var(--line)" stroke-width="1"/>
+      <line x1="90" y1="168" x2="750" y2="168" stroke="var(--line)" stroke-width="1"/>
+      <!-- look-back window and follow-up -->
+      <rect x="150" y="18" width="120" height="196" fill="var(--accent-soft)" opacity="0.6"/>
+      <text x="155" y="232" font-size="11" fill="var(--accent)">look-back window</text>
+      <line x1="270" y1="12" x2="270" y2="214" stroke="var(--accent)" stroke-width="2" stroke-dasharray="4 3"/>
+      <text x="276" y="22" font-size="11.5" font-weight="600" fill="var(--accent)">index date</text>
+      <text x="276" y="36" font-size="11" fill="var(--accent)">both disorders present</text>
+      <line x1="740" y1="12" x2="740" y2="214" stroke="var(--muted)" stroke-width="1.5"/>
+      <text x="736" y="232" font-size="11" fill="var(--muted)" text-anchor="end">end of observation</text>
+      <!-- diagnoses -->
+      <circle cx="190" cy="48" r="7" fill="var(--mh)"/>
+      <text x="190" y="72" font-size="11" fill="var(--mh)" text-anchor="middle">Anxiety</text>
+      <circle cx="270" cy="48" r="7" fill="var(--sud)"/>
+      <text x="300" y="72" font-size="11" fill="var(--sud)" text-anchor="middle">Alcohol use</text>
+      <!-- screenings -->
+      <g fill="var(--fg)" opacity="0.75">
+        <rect x="186" y="102" width="9" height="12" rx="2"/><rect x="266" y="102" width="9" height="12" rx="2"/>
+        <rect x="406" y="102" width="9" height="12" rx="2"/><rect x="516" y="102" width="9" height="12" rx="2"/>
+        <rect x="646" y="102" width="9" height="12" rx="2"/>
+      </g>
+      <text x="420" y="132" font-size="11" fill="var(--muted)">PHQ-9 · GAD-7 · AUDIT-C · DAST-10 scores</text>
+      <!-- treatment eras -->
+      <rect x="205" y="150" width="300" height="14" rx="3" fill="var(--mh)" opacity="0.85"/>
+      <text x="212" y="161" font-size="10.5" fill="var(--surface)">Sertraline era</text>
+      <rect x="330" y="170" width="150" height="14" rx="3" fill="var(--tx)" opacity="0.9"/>
+      <text x="337" y="181" font-size="10.5" fill="var(--surface)">CBT era</text>
+      <text x="330" y="200" font-size="11" fill="var(--tx)">overlap ≥ 7 days → "CBT+Sertraline"</text>
+      <rect x="560" y="150" width="120" height="14" rx="3" fill="var(--sud)" opacity="0.85"/>
+      <text x="567" y="161" font-size="10.5" fill="var(--surface)">Counselling</text>
+    </svg>
+  </div>
+  <p class="caption">Schematic of one concurrent-disorder journey. TreatmentPatterns would write this person's pathway as <code>Sertraline → CBT+Sertraline → Sertraline → SUD counselling</code>.</p>
+
+  <div class="terms">
+    <div><b>Cohort</b><span>The group whose journeys you study, with an entry rule and an exit rule.</span></div>
+    <div><b>Index date</b><span>Time zero for each person. Here it is the day both disorders are present.</span></div>
+    <div><b>Window</b><span>How far before and after the index date events count. A different window gives a different journey.</span></div>
+    <div><b>Era</b><span>Repeated records of one treatment merged into a single period when the gaps are short.</span></div>
+    <div><b>Combination</b><span>Two treatments overlapping long enough to count as one combined step.</span></div>
+    <div><b>Comparator</b><span>The group you contrast against. "Enriched" always means compared with someone.</span></div>
+  </div>
+</section>
+
+<section>
+  <h2>Four levels of journey analysis</h2>
+  <p>Each tool answers a different question, from one person to the whole population. Together they cover the main ways people analyse journeys.</p>
+  <div class="levels"><table>
+    <thead><tr><th>Level</th><th>Question</th><th>Tool</th><th>Output</th></tr></thead>
+    <tbody>
+      <tr><td>Individual</td><td>What happened to this patient, in order?</td><td>PatientExploreR</td><td>Patient report, encounter timeline</td></tr>
+      <tr><td>Sequence</td><td>In what order do patients get treatments?</td><td>TreatmentPatterns</td><td>Pathway counts, sunburst, Sankey</td></tr>
+      <tr><td>Contrast</td><td>What is over-represented in this group, and when?</td><td>CohortContrast</td><td>Enriched concepts, clusters, trajectories</td></tr>
+      <tr><td>Co-occurrence</td><td>Which diagnoses appear together more than chance?</td><td>Comorbidity4j</td><td>Relative risk, odds ratio, heatmap, network</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2>What was built</h2>
+  <ul>
+    <li><b>Shared study cohorts</b> in <code>results.cohort</code>: concurrent MH and SUD (769), MH only (1,426), SUD only (979), plus five treatment cohorts. The counts match the simulation's ground truth exactly.</li>
+    <li><b>All four tools run</b> against the local PostgreSQL database, each with a script in <code>omop_tools/scripts/</code>.</li>
+    <li><b>Compatibility fixes</b> so tools written for older software run on this setup. They are listed in <code>omop_tools/README.md</code>; a separate patch file holds the PatientExploreR changes.</li>
+    <li><b>Checked in the browser:</b> the PatientExploreR report and timeline, the TreatmentPatterns sunburst and Sankey, the CohortContrast viewer and the Comorbidity4j results page.</li>
+  </ul>
+</section>
+
+<section class="tool">
+  <div class="tool-head"><h2>TreatmentPatterns</h2><span class="pill core">Core tool</span></div>
+  <p class="where">OHDSI HADES R package · <code>Rscript omop_tools/scripts/run_treatmentpatterns.R</code></p>
+  <p class="finding">Most people with concurrent disorders get treated for their mental illness only. One in ten gets treatment for both conditions, and 38% get no treatment at all.</p>
+  <div class="bars" aria-label="Treatment received by cohort">
+    <div class="bar-row"><span>Concurrent MH + SUD</span><div class="bar"><i class="mh" style="width:44%"></i><i class="both" style="width:10.1%"></i><i class="sud" style="width:8.4%"></i><i class="un" style="width:37.5%"></i></div></div>
+    <div class="bar-row"><span>MH only</span><div class="bar"><i class="mh" style="width:50.7%"></i><i class="un" style="width:49.3%"></i></div></div>
+    <div class="bar-row"><span>SUD only</span><div class="bar"><i class="sud" style="width:6.9%"></i><i class="un" style="width:93.1%"></i></div></div>
+    <div class="legend"><span><i style="background:var(--mh)"></i>MH treatment only</span><span><i style="background:var(--tx)"></i>Both MH and SUD treatment</span><span><i style="background:var(--sud)"></i>SUD treatment only</span><span><i style="background:var(--line)"></i>No treatment</span></div>
+  </div>
+  <p class="caption">MH treatment means sertraline or CBT. SUD treatment means counselling, naltrexone or buprenorphine-naloxone. Groups of fewer than 5 people are reported as 5, so the shares are approximate.</p>
+  <div class="cols">
+    <div><h4>Worked well</h4><ul>
+      <li>Maintained OHDSI package that reads the standard cohort table.</li>
+      <li>Handles combinations and repeats, and keeps untreated patients as "None".</li>
+      <li>Sunburst and Sankey charts are easy to present.</li>
+    </ul></div>
+    <div><h4>Watch out for</h4><ul>
+      <li>Very sensitive to its settings. The defaults dropped every single-day CBT and counselling session until each session was given a 30-day episode.</li>
+      <li>The version available for R 4.3 crashes when one run has several target cohorts, so each cohort runs separately.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section class="tool">
+  <div class="tool-head"><h2>CohortContrast</h2><span class="pill core">Core tool</span></div>
+  <p class="where">R package with a Python viewer · <code>Rscript omop_tools/scripts/run_cohortcontrast.R</code> · viewer at localhost:8050</p>
+  <p class="finding">Compared with age- and sex-matched people, the concurrent group is enriched for exactly what the simulation was built to produce: SUD diagnoses (9–20 times), counselling (29 times), MDD (10 times), sertraline (5 times), CBT (7 times) and PHQ-9 scoring (6 times). It also found two patient clusters, of 152 and 617 people.</p>
+  <div class="cols">
+    <div><h4>Worked well</h4><ul>
+      <li>Data-driven. It finds the differences without being told which codes to look at.</li>
+      <li>The viewer adds timing (when after the index date an event occurs), concept overlap and patient clusters.</li>
+      <li>The two comparisons answer different questions: against MH-only patients it isolates what SUD adds; against matched controls it shows the whole profile.</li>
+    </ul></div>
+    <div><h4>Watch out for</h4><ul>
+      <li>New (version 1.0) and dependency-heavy. It needed newer R packages in a separate library and a Python viewer.</li>
+      <li>Results depend on the index date. Against MH-only patients, social-needs screening looks lower in the concurrent group, most likely because their window starts later and so covers fewer visits.</li>
+      <li>Matched controls have to be trimmed to their own observation periods first.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section class="tool">
+  <div class="tool-head"><h2>Comorbidity4j</h2><span class="pill niche">Use for comorbidity figures</span></div>
+  <p class="where">Java web app · <code>omop_tools/scripts/c4j_start_server.sh</code>, then <code>c4j_export.sh</code> and <code>c4j_run_analysis.sh</code></p>
+  <p class="finding">Every MH × SUD pair co-occurs more than chance. The strongest are MDD with opioid use (odds ratio 5.0) and MDD with cannabis use (3.8); anxiety with alcohol use is the weakest (1.8). This matches the NSDUH odds ratio of 3.6 that the data was calibrated to.</p>
+  <div class="levels"><table>
+    <thead><tr><th>Pair</th><th style="text-align:right">Patients with both</th><th style="text-align:right">Relative risk</th><th style="text-align:right">Odds ratio</th></tr></thead>
+    <tbody>
+      <tr><td>Major depressive disorder × opioid use</td><td class="n">44</td><td class="n">3.76</td><td class="n">5.00</td></tr>
+      <tr><td>Major depressive disorder × cannabis use</td><td class="n">142</td><td class="n">2.77</td><td class="n">3.77</td></tr>
+      <tr><td>Anxiety disorder × opioid use</td><td class="n">62</td><td class="n">2.42</td><td class="n">3.35</td></tr>
+      <tr><td>Anxiety disorder × cannabis use</td><td class="n">241</td><td class="n">2.15</td><td class="n">3.03</td></tr>
+      <tr><td>Major depressive disorder × alcohol use</td><td class="n">150</td><td class="n">2.08</td><td class="n">2.62</td></tr>
+      <tr><td>Anxiety disorder × alcohol use</td><td class="n">238</td><td class="n">1.51</td><td class="n">1.78</td></tr>
+    </tbody>
+  </table></div>
+  <p class="caption">9,888 people with at least one recorded condition. All shown pairs have a Benjamini–Hochberg adjusted p below 0.001.</p>
+  <div class="cols">
+    <div><h4>Worked well</h4><ul>
+      <li>Fast (under a second) with standard statistics: relative risk, odds ratio, phi and adjusted Fisher tests.</li>
+      <li>Results split by sex, plus an interactive heatmap and network.</li>
+    </ul></div>
+    <div><h4>Watch out for</h4><ul>
+      <li>Diagnoses only, so not a journey tool. It cannot connect to the database; data goes in as exported files.</li>
+      <li>Only a web form and needs Java 8, so the run is scripted.</li>
+      <li>"Directional" mode counts only A-before-B and splits each pair in two. Leave it off when measuring comorbidity strength.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section class="tool">
+  <div class="tool-head"><h2>PatientExploreR</h2><span class="pill demo">Demos only</span></div>
+  <p class="where">R Shiny app · <code>Rscript omop_tools/scripts/run_patientexplorer.R</code> · localhost:8090</p>
+  <p class="finding">Good for showing one person's record: the patient report lists every event by type, and the timeline places visits in time. It is the most direct way to show an audience what a single journey looks like.</p>
+  <div class="cols">
+    <div><h4>Worked well</h4><ul>
+      <li>No coding needed once it runs: search a patient, read the report, scroll the timeline.</li>
+      <li>A criteria search for finding every patient with a given concept is also included; it was not tested here.</li>
+    </ul></div>
+    <div><h4>Watch out for</h4><ul>
+      <li>Last updated in 2018 for MySQL and OMOP 5.3. It took six fixes to run on PostgreSQL and OMOP 5.4.</li>
+      <li>Single patients only. The timeline shows nothing until you pick visit types.</li>
+      <li>For long-term use, OHDSI ATLAS patient profiles or LinkR are better maintained.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section>
+  <h2>Lessons for reading any journey analysis</h2>
+  <ol>
+    <li><b>Define time zero first.</b> The index date decides what counts as before and after. Here, anchoring on the second diagnosis put treatment for the first disorder before index, so the treatment window had to reach back 365 days.</li>
+    <li><b>Settings change the story.</b> Era-collapse gaps and minimum durations decide whether short treatments appear at all. Report them with the results.</li>
+    <li><b>Always name the comparator.</b> "Enriched" against MH-only patients and against the general population are different findings.</li>
+    <li><b>Count the untreated.</b> The "None" pathway was the largest group in every cohort, and it is often the most important finding.</li>
+    <li><b>Order and co-occurrence are different questions.</b> Comorbidity strength ignores order; directional analysis splits it. Choose deliberately.</li>
+    <li><b>Synthetic data checks the pipeline, not the clinic.</b> These results mostly recover the rules the data was built from: NSDUH rates, the 50/50 order of onset and the assumed treatment mix. That is the point of this dataset: when the same scripts run on real OMOP data, any difference reflects the data, not the tools.</li>
+  </ol>
+  <div class="note"><b>Data note.</b> All 10,000 patients are synthetic. Journey timing and treatment content are simulation assumptions, documented in the project README.</div>
+</section>
+
+<section>
+  <h2>Suggested next steps</h2>
+  <ul>
+    <li>Use TreatmentPatterns and CohortContrast as the core pair: one for the order of treatment, one for what differs and when.</li>
+    <li>Add OHDSI ATLAS (Docker) for patient profiles and cohort pathways in a maintained interface.</li>
+    <li>Turn the Comorbidity4j heatmap into the comorbidity figure for presentations.</li>
+    <li>Re-run the same scripts on real OMOP data once access is approved. Nothing in them is specific to synthetic data.</li>
+  </ul>
+</section>
+
+<footer>Scripts, patches and setup steps are in <code>omop_tools/</code> in the SYNCD project, documented in <code>omop_tools/README.md</code>. Results were generated on 17 November 2026 from the <code>synthetic_concurrent</code> database.</footer>
+</main>

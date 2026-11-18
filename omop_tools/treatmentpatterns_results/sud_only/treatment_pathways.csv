@@ -1,0 +1,7 @@
+"pathway","freq","age","sex","index_year","analysis_id","target_cohort_id","target_cohort_name"
+"None",911,"all","all","all",3,3,"SUD only"
+"SUD counselling",36,"all","all","all",3,3,"SUD only"
+"Naltrexone+SUD counselling-Naltrexone",26,"all","all","all",3,3,"SUD only"
+"Buprenorphine-naloxone+SUD counselling-Buprenorphine-naloxone",4,"all","all","all",3,3,"SUD only"
+"Buprenorphine-naloxone+Naltrexone+SUD counselling-Buprenorphine-naloxone+Naltrexone",1,"all","all","all",3,3,"SUD only"
+"SUD counselling-Naltrexone",1,"all","all","all",3,3,"SUD only"

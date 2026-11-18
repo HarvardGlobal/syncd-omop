@@ -1,0 +1,96 @@
+diff --git a/PatientExploreR-OMOP_functions.R b/PatientExploreR-OMOP_functions.R
+index ad12e67..e297951 100644
+--- a/PatientExploreR-OMOP_functions.R
++++ b/PatientExploreR-OMOP_functions.R
+@@ -36,7 +36,7 @@ checkOMOPconnection <- function(driver, username, password, host, dbname, port)
+   status<- tryCatch(
+     {
+       if (driver=="mysql") {
+-        drv <- dbDriver("MySQL")
++        drv <- RPostgres::Postgres()  # SYNCD patch: DBI path now uses PostgreSQL
+         fullConnectString <- setConnectFunction(username, password, host, dbname, port)
+         con <- eval(parse(text = fullConnectString))
+       } else {
+@@ -79,7 +79,7 @@ checkOMOPtables <- function(driver, username, password, host, dbname, port) {
+   necessaryTables = c("concept","concept_ancestor","concept_relationship","condition_occurrence","death","device_exposure","drug_exposure","measurement","observation","person","procedure_occurrence","visit_occurrence")
+   
+   if (driver=="mysql") {
+-    drv <- dbDriver("MySQL")
++    drv <- RPostgres::Postgres()  # SYNCD patch: DBI path now uses PostgreSQL
+      fullConnectString <- setConnectFunction(username, password, host, dbname, port)
+     con <- eval(parse(text = fullConnectString))
+ 
+diff --git a/app.R b/app.R
+index 8fbac2e..86c9740 100644
+--- a/app.R
++++ b/app.R
+@@ -77,7 +77,7 @@ ui <- fluidPage(
+                                                    pickerInput(
+                                                      inputId = "driver_picker", 
+                                                      label = "Driver",  
+-                                                     choices = c("MySQL","PostgreSQL", "Amazon Redshift", "Microsoft SQL Server", "Microsoft Parallel Data Warehouse", "Google BigQuery"), 
++                                                     choices = c("PostgreSQL (DBI, SYNCD patch)" = "MySQL", "PostgreSQL (DatabaseConnector)" = "PostgreSQL", "Amazon Redshift", "Microsoft SQL Server", "Microsoft Parallel Data Warehouse", "Google BigQuery"), 
+                                                      selected = "MySQL",
+                                                      multiple = FALSE),
+       
+@@ -1049,18 +1049,20 @@ if (!interactive()) sink(stderr(), type = "output")
+     if (input$driver_picker=="MySQL") {
+       
+       # creating connection object
+-      drv <- dbDriver("MySQL")
++      drv <- RPostgres::Postgres()  # SYNCD patch: DBI path now uses PostgreSQL
+       fullConnectString <- setConnectFunction(input$sqlid, input$sqlpass, input$sqlhost, input$sqldb, input$sqlport)
+       con <- eval(parse(text = fullConnectString))
+       
+       # close db connection after function
+       on.exit(DBI::dbDisconnect(con))
+       
+-      # send query
+-      res <-DBI::dbSendQuery(con, query)
+-      
+-      # get elements from results
+-      result <- DBI::fetch(res, -1)
++      # send query and fetch all rows (SYNCD patch: DBI::fetch() no longer exists for RPostgres)
++      result <- DBI::dbGetQuery(con, query)
++      # SYNCD patch: RMySQL returned dates as text and ids as doubles; the app relies on that.
++      result[] <- lapply(result, function(x) {
++        if (inherits(x, "Date") || inherits(x, "POSIXt")) as.character(x)
++        else if (inherits(x, "integer64")) as.numeric(x) else x
++      })
+       
+     } else {
+     if (input$driver_picker == "PostgreSQL") {
+@@ -1159,7 +1161,7 @@ if (!interactive()) sink(stderr(), type = "output")
+     
+     ## load driver
+     if (driver=="mysql") {
+-      suppressPackageStartupMessages(library("RMySQL"))
++      suppressPackageStartupMessages(library("RPostgres"))
+     } else if (driver %in% c("oracle", "postgresql", "redshift", "sql server", "pdw", "bigquery")) {
+       suppressPackageStartupMessages(library("DatabaseConnector"))
+       suppressPackageStartupMessages(library("SqlRender"))
+@@ -2418,8 +2420,9 @@ enable_after_search <-function(){
+     encounters=encounters[!is.na(visit_start_date)] # remove NA dates
+ 
+     encounters=encounters[visit_concept %in% input$VisitTypePicker]
+-    encounters=encounters[admitting_concept %in% input$AdmittingTypePicker]
+-    encounters=encounters[discharge_concept %in% input$DischargeTypePicker]
++    # SYNCD patch: ETL-Synthea leaves admitted-from / discharged-to empty; keep those visits
++    encounters=encounters[is.na(admitting_concept) | admitting_concept %in% input$AdmittingTypePicker]
++    encounters=encounters[is.na(discharge_concept) | discharge_concept %in% input$DischargeTypePicker]
+ 
+     encounters
+ 
+diff --git a/directoryInput.R b/directoryInput.R
+index 516f89c..dd02a94 100755
+--- a/directoryInput.R
++++ b/directoryInput.R
+@@ -121,7 +121,7 @@ directoryInput = function(inputId, label, value = NULL) {
+ 
+     div(
+       class = 'form-group directory-input-container',
+-      shiny:::`%AND%`(label, tags$label(label)),
++      if (!is.null(label) && nzchar(label)) tags$label(label),  # SYNCD patch: shiny removed %AND%
+       div(
+         span(
+           class = 'col-xs-9 col-md-9', # slight modification here to change col-md from 11 to 9 (for button to fit column)
