@@ -3,6 +3,29 @@
 Four open-source tools from the "OMOP longitudinal tools" shortlist, run against the local
 `synthetic_concurrent` PostgreSQL database (OMOP CDM 5.4). Run every command from the project root.
 
+## Start here: SYNCD Journey Explorer (one app, one address)
+
+```bash
+pip install -r omop_tools/journey_app/requirements.txt   # once
+omop_tools/scripts/run_journey_app.sh                     # then open http://localhost:8070
+```
+
+One local web app brings all of the results together, with no login, uploads or queries:
+
+| Tab | What it shows | Source |
+|---|---|---|
+| Patient journey | Pick a patient from a list (or "Random patient") to see their diagnoses, drugs, therapy, visits and screening scores on one timeline | live from the OMOP database (replaces PatientExploreR) |
+| Treatment pathways | Sunburst, "what happened next" bars, share treated / untreated, common pathways, era durations | TreatmentPatterns results |
+| Cohort contrast | Concepts enriched in the concurrent group, timing after diagnosis, patient subgroups | CohortContrast results |
+| Comorbidity | MH × SUD odds-ratio grid, top associations for any diagnosis, by sex | Comorbidity4j results |
+| Database (ARES) | Data quality and characterization | ARES site, served by the same app |
+
+The app reads the result folders below. They are already generated on this machine; on a fresh
+clone, run each tool once (next section) before starting the app. Tabs whose results are missing
+say which script to run. The separate tool viewers below are still available but no longer needed.
+
+## Running the tools themselves
+
 | Tool | Question it answers | Run | View |
 |---|---|---|---|
 | PatientExploreR | What happened to *this* patient, in order? | `Rscript omop_tools/scripts/run_patientexplorer.R` | http://localhost:8090 |

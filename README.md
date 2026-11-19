@@ -244,7 +244,7 @@ reports, data density over time and data quality results. It runs locally as a s
 with no Docker or WebAPI.
 
 ```bash
-scripts/08_view_ares.sh        # serves omop_viz/ares_app/site at http://localhost:8085
+scripts/08_view_ares.sh        # ARES alone at http://localhost:8085 (also a tab in omop_tools/scripts/run_journey_app.sh, port 8070)
 ```
 
 | Where to look | What it shows |
