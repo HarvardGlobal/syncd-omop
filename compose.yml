@@ -1,0 +1,22 @@
+# R toolbox for the SYNCD pipeline. Keeps R and Java off the host.
+#
+# Usage (from repo root):
+#   docker compose build r
+#   docker compose run --rm r Rscript scripts/06_load_omop.R staging
+#   docker compose run --rm r Rscript scripts/06_load_omop.R vocab_etl
+#   docker compose run --rm r Rscript scripts/07_run_ares.R
+#   docker compose run --rm r bash scripts/06a_load_vocab.sh source_data/athena_vocab
+
+services:
+  r:
+    build:
+      context: docker/r          # small build context; see note above
+    network_mode: host          # localhost:5432 reaches the Postgres container
+    user: "${UID:-1000}:${GID:-1000}"
+    working_dir: /work
+    volumes:
+      - ./:/work                # repo root, so normalizePath(".") behaves as before
+    env_file: .env
+    environment:
+      HOME: /tmp
+      POSTGRES_PATH: /usr/bin
