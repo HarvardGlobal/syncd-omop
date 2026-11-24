@@ -1,11 +1,33 @@
 #!/usr/bin/env bash
 # Step 6a - Load Athena vocabulary files into cdm.* with PostgreSQL COPY (streams the files,
 # so the 1.7 GB CONCEPT_RELATIONSHIP never has to fit in R's memory).
-# Usage: scripts/06a_load_vocab.sh <athena_vocab_dir> [database=synthetic_concurrent]
+#
+# Usage: scripts/06a_load_vocab.sh <athena_vocab_dir> [database]
+#   database defaults to OMOP_DB_NAME from .env; pass it only for a one-off override.
+# Connection settings come from .env via scripts/lib/env.sh (see .env.example).
+
 set -euo pipefail
+# shellcheck source-path=SCRIPTDIR source=lib/env.sh
+source "$(dirname "$0")/lib/env.sh"
+
+[[ $# -ge 1 ]] || { echo "Usage: $0 <athena_vocab_dir> [database]" >&2; exit 1; }
+
+# Absolute path to the Athena CSV directory.
 DIR="$(cd "$1" && pwd)"
-DB="${2:-synthetic_concurrent}"
-PSQL="/opt/homebrew/opt/postgresql@16/bin/psql -v ON_ERROR_STOP=1 -d $DB"
+
+# Map OMOP_DB_* onto libpq's PG* variables (host, port, user, password, database),
+# so psql reaches the same database the R scripts use. No password on the command line.
+omop_pg_env
+DB="${2:-$PGDATABASE}"
+
+# psql from PATH (or PSQL_BIN in .env): no OS-specific install path.
+# ON_ERROR_STOP=1 makes psql exit non-zero on the first SQL error,
+# so 'set -e' stops the script instead of carrying on with a half-loaded database.
+PSQL="$(find_psql) -v ON_ERROR_STOP=1 -d $DB"
+
+# Fail early with a clear message if the container isn't reachable.
+$PSQL -c  'SELECT 1' >/dev/null \
+  || { echo "Can't reach $DB at $PGHOST:$PGPORT. Is the container up?" >&2; exit 1; }
 
 for T in vocabulary domain concept_class relationship concept concept_relationship \
          concept_synonym concept_ancestor drug_strength; do
