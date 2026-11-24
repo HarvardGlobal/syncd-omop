@@ -1,7 +1,9 @@
 # Patient journey tools on the SYNCD OMOP database
 
 Four open-source tools from the "OMOP longitudinal tools" shortlist, run against the local
-`synthetic_concurrent` PostgreSQL database (OMOP CDM 5.4). Run every command from the project root.
+PostgreSQL OMOP CDM 5.4 database named by `OMOP_DB_NAME` in `.env` (see `.env.example`). Every
+script reads its connection, and optional ports and paths, from that file; nothing is hardcoded.
+Run every command from the project root.
 
 ## Start here: SYNCD Journey Explorer (one app, one address)
 
@@ -39,9 +41,13 @@ files directly: `python3 -m http.server 8086 --directory omop_tools`.
 ## Shared setup
 
 ```bash
-psql -d synthetic_concurrent -f omop_tools/sql/02_study_cohorts.sql   # cohorts in results.cohort
-psql -d synthetic_concurrent -f omop_tools/sql/01_patientexplorer_schema.sql   # PatientExploreR only
+scripts/psql.sh -f omop_tools/sql/02_study_cohorts.sql          # cohorts in results.cohort
+scripts/psql.sh -f omop_tools/sql/01_patientexplorer_schema.sql  # PatientExploreR only
 ```
+
+`scripts/psql.sh` is `psql` pointed at the database in `.env`. In PatientExploreR's login form,
+choose "PostgreSQL (DBI, SYNCD patch)" and leave the connection fields blank: they are filled
+from `.env`.
 
 `02_study_cohorts.sql` builds the cohorts every tool uses (counts match the ground truth exactly):
 

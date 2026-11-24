@@ -6,23 +6,20 @@
 # The ARES web app (omop_viz/ares_app/site) then reads omop_viz/ares_app/site/data.
 #
 # Usage (from the project root):  Rscript scripts/07_run_ares.R [all|achilles|dqd|index]
+#
+# Connection: read from .env at the repo root by scripts/lib/env.R (see .env.example).
 suppressPackageStartupMessages({
   library(DatabaseConnector)
 })
+source(file.path("scripts", "lib", "env.R"))
 args <- commandArgs(trailingOnly = TRUE)
 stage <- if (length(args) >= 1) args[1] else "all"
 root <- normalizePath(".")
 driver_dir <- file.path(root, "omop_load", "jdbc")
 Sys.setenv(DATABASECONNECTOR_JAR_FOLDER = driver_dir)
 
-cd <- createConnectionDetails(
-  dbms = "postgresql",
-  server = Sys.getenv("OMOP_DB_SERVER", "localhost/synthetic_concurrent"),
-  port = as.integer(Sys.getenv("OMOP_DB_PORT", "5432")),
-  user = Sys.getenv("OMOP_DB_USER", Sys.info()[["user"]]),
-  password = Sys.getenv("OMOP_DB_PASSWORD", ""),
-  pathToDriver = driver_dir
-)
+# Same database as 06_load_omop.R, because both read OMOP_DB_NAME from .env.
+cd <- omop_connection_details(driver_dir)
 CDM <- "cdm"; RESULTS <- "results"; VOCAB <- "cdm"; CDM_VERSION <- "5.4"
 THREADS <- 4
 ares_data <- file.path(root, "omop_viz", "ares_app", "site", "data")

@@ -9,8 +9,10 @@ and can be browsed in OHDSI ARES (see below).
 Intended use: software testing, cohort development, teaching, and preliminary methods
 evaluation. **Not** for estimating treatment effects or clinical outcomes.
 
-**Start here:** [`figures/SYNCD_setup_guide.pdf`](figures/SYNCD_setup_guide.pdf) gives step-by-step
-instructions to rebuild everything from scratch.
+**Start here:** [`GETTING-STARTED.md`](GETTING-STARTED.md) is a plain-language, step-by-step
+checklist for setting everything up with Docker on Linux, from "just view the results" to the
+full database and analysis tools. [`figures/SYNCD_setup_guide.pdf`](figures/SYNCD_setup_guide.pdf)
+describes the original macOS/Homebrew setup.
 
 ## Getting the data
 
@@ -195,9 +197,14 @@ Commands run (ETLSyntheaBuilder 2.1, DatabaseConnector 6.4.0; logs in `omop_load
 Rscript scripts/06_load_omop.R staging
 scripts/06a_load_vocab.sh source_data/athena_vocab
 Rscript scripts/06_load_omop.R etl
-/opt/homebrew/opt/postgresql@16/bin/psql -d synthetic_concurrent -f scripts/06b_fix_screening_scores.sql
-/opt/homebrew/opt/postgresql@16/bin/psql -d synthetic_concurrent -f scripts/06c_add_demographic_concepts.sql
+scripts/psql.sh -f scripts/06b_fix_screening_scores.sql
+scripts/psql.sh -f scripts/06c_add_demographic_concepts.sql
 ```
+
+Every script reads its connection (host, port, database, user, password) from `.env` at the
+repo root; copy `.env.example` to start. `scripts/psql.sh` is plain `psql` pointed at that
+database. To run all of this in Docker instead of installing R and Java, see
+[README-docker.md](README-docker.md).
 
 The Athena vocabularies are v5.0 29-AUG-26. They were loaded with PostgreSQL COPY so the
 1.7 GB CONCEPT_RELATIONSHIP file did not have to fit in R's memory. The ETL took about

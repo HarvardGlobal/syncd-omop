@@ -5,24 +5,20 @@
 # Writes CSVs per target, and interactive sunburst + Sankey pages per target to
 # omop_tools/treatmentpatterns_results/.
 # Usage (from the project root): Rscript omop_tools/scripts/run_treatmentpatterns.R
+# Connection settings come from .env via scripts/lib/env.R (see .env.example).
 suppressPackageStartupMessages({
   library(DatabaseConnector)
   library(TreatmentPatterns)
   library(dplyr)
 })
+source(file.path("scripts", "lib", "env.R"))
 root <- normalizePath(".")
 driver_dir <- file.path(root, "omop_load", "jdbc")
 out_dir <- file.path(root, "omop_tools", "treatmentpatterns_results")
 dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 
-cd <- createConnectionDetails(
-  dbms = "postgresql",
-  server = Sys.getenv("OMOP_DB_SERVER", "localhost/synthetic_concurrent"),
-  port = as.integer(Sys.getenv("OMOP_DB_PORT", "5432")),
-  user = Sys.getenv("OMOP_DB_USER", Sys.info()[["user"]]),
-  password = Sys.getenv("OMOP_DB_PASSWORD", ""),
-  pathToDriver = driver_dir
-)
+# Same database as the pipeline scripts: OMOP_DB_* from .env, no built-in default.
+cd <- omop_connection_details(driver_dir)
 
 targets <- data.frame(cohortId = c(1, 2, 3),
                       cohortName = c("Concurrent MH and SUD", "MH only", "SUD only"))

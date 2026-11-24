@@ -3,7 +3,7 @@
 -- their numeric VALUE, so PHQ-2/PHQ-9/GAD-7/AUDIT-C/DAST-10 totals arrive empty.
 -- This copies each score from synthea.observations, matched on person, date and code.
 -- Rows are paired by order on the rare days with two results for the same code.
--- Usage: psql -d synthetic_concurrent -f scripts/06b_fix_screening_scores.sql
+-- Usage: scripts/psql.sh -f scripts/06b_fix_screening_scores.sql   (database from OMOP_DB_NAME in .env)
 BEGIN;
 
 WITH src AS (

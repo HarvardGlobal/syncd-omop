@@ -29,7 +29,7 @@ index 8fbac2e..86c9740 100644
                                                       inputId = "driver_picker", 
                                                       label = "Driver",  
 -                                                     choices = c("MySQL","PostgreSQL", "Amazon Redshift", "Microsoft SQL Server", "Microsoft Parallel Data Warehouse", "Google BigQuery"), 
-+                                                     choices = c("PostgreSQL (DBI, SYNCD patch)" = "MySQL", "PostgreSQL (DatabaseConnector)" = "PostgreSQL", "Amazon Redshift", "Microsoft SQL Server", "Microsoft Parallel Data Warehouse", "Google BigQuery"), 
++                                                     choices = c("PostgreSQL (DBI, SYNCD patch)" = "MySQL", "PostgreSQL (DatabaseConnector)" = "PostgreSQL", "Amazon Redshift", "Microsoft SQL Server", "Microsoft Parallel Data Warehouse", "Google BigQuery"),
                                                       selected = "MySQL",
                                                       multiple = FALSE),
        

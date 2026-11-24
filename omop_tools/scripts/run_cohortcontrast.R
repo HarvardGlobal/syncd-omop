@@ -10,24 +10,24 @@
 # CohortContrast 1.0.0 needs newer packages than the R 4.3 binaries; they are installed in
 # omop_tools/r_lib_cohortcontrast (see omop_tools/README.md).
 # Usage (from the project root): Rscript omop_tools/scripts/run_cohortcontrast.R
-.libPaths(c(normalizePath(file.path("omop_tools", "r_lib_cohortcontrast")), .libPaths()))
+#   CC_STUDIES=concurrent_vs_mh_only  runs just one of the two studies.
+# Connection settings come from .env via scripts/lib/env.R (see .env.example).
+# The private library is added only if it exists; in the Docker image the packages are
+# already on the default library path (see docker/r/install.R).
+cc_lib <- file.path("omop_tools", "r_lib_cohortcontrast")
+if (dir.exists(cc_lib)) .libPaths(c(normalizePath(cc_lib), .libPaths()))
 suppressPackageStartupMessages({
   library(CohortContrast)
   library(CDMConnector)
   library(DBI)
   library(dplyr)
 })
+source(file.path("scripts", "lib", "env.R"))
 out_dir <- normalizePath(file.path("omop_tools", "cohortcontrast_results"), mustWork = FALSE)
 dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 
-db <- DBI::dbConnect(
-  RPostgres::Postgres(),
-  dbname = Sys.getenv("OMOP_DB_NAME", "synthetic_concurrent"),
-  host = Sys.getenv("OMOP_DB_HOST", "localhost"),
-  port = as.integer(Sys.getenv("OMOP_DB_PORT", "5432")),
-  user = Sys.getenv("OMOP_DB_USER", Sys.info()[["user"]]),
-  password = Sys.getenv("OMOP_DB_PASSWORD", "")
-)
+# RPostgres connection built from OMOP_DB_* in .env; no built-in database or user.
+db <- omop_dbi_connect()
 on.exit(DBI::dbDisconnect(db), add = TRUE)
 
 cdm <- CDMConnector::cdmFromCon(

@@ -15,6 +15,12 @@ omop_viz/achilles_logs/
 omop_viz/ares_app/site/data/**/log_*.txt
 output/*/metadata/
 
+# Docker toolbox credentials, loaded by compose.yml (env_file: .env). See README-docker.md.
+# .env.* catches variants like .env.local or .env.prod; the template stays tracked.
+.env
+.env.*
+!.env.example
+
 .DS_Store
 __pycache__/
 *.pyc
@@ -29,3 +35,4 @@ omop_tools/r_lib_cohortcontrast/
 omop_tools/comorbidity4j_input/
 omop_tools/comorbidity4j_results/
 omop_tools/cohortcontrast_results/
+omop_tools/journey_app/.venv/

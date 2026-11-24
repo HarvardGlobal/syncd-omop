@@ -10,12 +10,13 @@
 #   scripts/06a_load_vocab.sh <athena_vocab_dir> && Rscript scripts/06_load_omop.R etl
 #       -> same result, vocabularies streamed by PostgreSQL COPY (used for this project)
 #
-# Connection: local PostgreSQL 16 (Homebrew), database synthetic_concurrent, current OS user.
-# Override with env vars OMOP_DB_SERVER, OMOP_DB_PORT, OMOP_DB_USER, OMOP_DB_PASSWORD.
+# Connection: read from .env at the repo root (OMOP_DB_HOST, OMOP_DB_PORT, OMOP_DB_NAME,
+# OMOP_DB_USER, OMOP_DB_PASSWORD) by scripts/lib/env.R. See .env.example.
 suppressPackageStartupMessages({
   library(DatabaseConnector)
   library(ETLSyntheaBuilder)
 })
+source(file.path("scripts", "lib", "env.R"))
 
 args <- commandArgs(trailingOnly = TRUE)
 stage <- if (length(args) >= 1) args[1] else stop("stage required: staging | vocab_etl")
@@ -25,16 +26,8 @@ dir.create(driver_dir, recursive = TRUE, showWarnings = FALSE)
 if (length(list.files(driver_dir, pattern = "postgresql.*\\.jar$")) == 0) {
   downloadJdbcDrivers(dbms = "postgresql", pathToDriver = driver_dir)
 }
-Sys.setenv(POSTGRES_PATH = "/opt/homebrew/opt/postgresql@16/bin")  # psql \copy for bulk loads
-
-cd <- createConnectionDetails(
-  dbms = "postgresql",
-  server = Sys.getenv("OMOP_DB_SERVER", "localhost/synthetic_concurrent"),
-  port = as.integer(Sys.getenv("OMOP_DB_PORT", "5432")),
-  user = Sys.getenv("OMOP_DB_USER", Sys.info()[["user"]]),
-  password = Sys.getenv("OMOP_DB_PASSWORD", ""),
-  pathToDriver = driver_dir
-)
+configure_psql_path()                     # psql \copy for bulk loads; found on PATH, not hardcoded
+cd <- omop_connection_details(driver_dir)  # all connection settings come from .env
 
 CDM_SCHEMA <- "cdm"
 SYNTHEA_SCHEMA <- "synthea"

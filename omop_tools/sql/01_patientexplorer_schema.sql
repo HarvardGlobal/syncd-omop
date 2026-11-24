@@ -5,7 +5,7 @@
 --   * a CONCEPT table trimmed to the concepts this database uses (plus their ancestors and the
 --     small reference domains), so the app loads ~10k concepts instead of 3 million.
 -- The app connects with search_path = pexr (set by run_patientexplorer.R).
--- Usage: psql -d synthetic_concurrent -f omop_tools/sql/01_patientexplorer_schema.sql
+-- Usage: scripts/psql.sh -f omop_tools/sql/01_patientexplorer_schema.sql   (database from OMOP_DB_NAME in .env)
 BEGIN;
 DROP SCHEMA IF EXISTS pexr CASCADE;
 CREATE SCHEMA pexr;
