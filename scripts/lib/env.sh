@@ -29,7 +29,8 @@ export PROJECT_ROOT
 # Load KEY=value pairs from a .env file into the environment.
 #
 # The file is parsed as data, never `source`d, so nothing in it can run as a
-# command. Same rules as load_dotenv() in env.R: comments and blank lines are
+# command. (Sourcing would also die on `UID=1000`, because UID is readonly in
+# bash; here it's simply skipped, as it's already set.) Same rules as load_dotenv() in env.R: comments and blank lines are
 # skipped, a leading `export ` is ignored, surrounding quotes are removed, and a
 # trailing ` # comment` on an unquoted value is dropped. Variables that are
 # already set are left alone.
@@ -109,6 +110,21 @@ find_psql() {
     exit 1
   fi
   printf '%s\n' "$bin"
+}
+
+##
+# Fail fast, with a clear message, if the database can't be reached.
+# Call after omop_pg_env, so psql already knows where to connect.
+#
+# @param $1 The psql command to test with (default: psql found by find_psql)
+##
+check_db() {
+  local psql="${1:-$(find_psql)}"
+  $psql -v ON_ERROR_STOP=1 -Atqc 'SELECT 1' >/dev/null 2>&1 || {
+    echo "Can't reach database '$PGDATABASE' at $PGHOST:$PGPORT as $PGUSER." >&2
+    echo "Is Postgres running, and are the OMOP_DB_* values in .env right?" >&2
+    exit 1
+  }
 }
 
 ##

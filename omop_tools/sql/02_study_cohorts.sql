@@ -15,7 +15,7 @@
 -- CBT and counselling are single-day procedures; each session is given a 30-day episode so it
 -- survives TreatmentPatterns' minimum era durations and can combine with drug eras.
 -- Only records from the study window (2024-01-01 to 2025-12-31) are used.
--- Usage: psql -d synthetic_concurrent -f omop_tools/sql/02_study_cohorts.sql
+-- Usage: scripts/psql.sh -f omop_tools/sql/02_study_cohorts.sql   (database from OMOP_DB_NAME in .env)
 BEGIN;
 
 CREATE TABLE IF NOT EXISTS results.cohort (

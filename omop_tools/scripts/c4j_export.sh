@@ -2,11 +2,25 @@
 # Export OMOP CDM tables into Comorbidity4j's tab-separated input format.
 # Diagnoses = standard Condition-domain concepts from cdm.condition_occurrence (whole history),
 # keyed by concept_id; one "visit" per condition_occurrence visit (or per person-date when the
-# record has no visit). Usage: omop_tools/scripts/c4j_export.sh [out_dir]
+# record has no visit).
+#
+# Usage: omop_tools/scripts/c4j_export.sh [out_dir=comorbidity4j_input]
+#   out_dir is relative to omop_tools/.
+# Connection settings come from .env via scripts/lib/env.sh (see .env.example);
+# override the database for one run with  OMOP_DB_NAME=other_db omop_tools/scripts/c4j_export.sh
 set -euo pipefail
-OUT="$(cd "$(dirname "$0")/.." && pwd)/${1:-comorbidity4j_input}"
+# shellcheck source-path=SCRIPTDIR source=../../scripts/lib/env.sh
+source "$(dirname "$0")/../../scripts/lib/env.sh"
+
+OUT="$PROJECT_ROOT/omop_tools/${1:-comorbidity4j_input}"
 mkdir -p "$OUT"
-PSQL="/opt/homebrew/opt/postgresql@16/bin/psql -v ON_ERROR_STOP=1 -d ${OMOP_DB:-synthetic_concurrent} -q"
+
+# OMOP_DB_* -> PG*, so psql connects to the same database as every other script.
+omop_pg_env
+PSQL="$(find_psql) -v ON_ERROR_STOP=1 -q"
+check_db "$PSQL"
+echo "Exporting from $PGDATABASE at $PGHOST:$PGPORT to $OUT"
+
 CP="WITH (FORMAT csv, DELIMITER E'\t', HEADER true)"
 $PSQL -c "\copy (SELECT p.person_id AS patient_id,
   to_char(make_date(p.year_of_birth, coalesce(p.month_of_birth,1), coalesce(p.day_of_birth,1)), 'YYYY/MM/DD') AS patient_dateBirth,

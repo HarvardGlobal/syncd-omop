@@ -12,13 +12,18 @@ Everything reads this project's own data; there is no login, upload or query to 
   Database (ARES)     the ARES data quality and characterization viewer, served by the same app
 
 Run from the project root:  omop_tools/scripts/run_journey_app.sh   (default port 8070)
+Or directly:                omop_tools/journey_app/.venv/bin/python omop_tools/journey_app/app.py
+
+Configuration comes from the project-root .env (shared with the R container and the
+launcher script); see load_env_file() and db_settings() below. Variables already set
+in the environment always win over the file.
 """
 from __future__ import annotations
 
 import json
 import os
 import re
-from functools import lru_cache
+from functools import lru_cache, wraps
 from pathlib import Path
 
 import numpy as np
@@ -30,6 +35,7 @@ from flask import abort, send_from_directory
 
 TOOLS = Path(__file__).resolve().parents[1]          # omop_tools/
 PROJECT = TOOLS.parent
+ENV_FILE = PROJECT / ".env"
 ARES_SITE = PROJECT / "omop_viz" / "ares_app" / "site"
 TP_DIR = TOOLS / "treatmentpatterns_results"
 CC_DIR = TOOLS / "cohortcontrast_results"
@@ -56,16 +62,80 @@ SCORES = {  # observation concept -> (label, common positive-screen cut-off)
 }
 
 
+# --------------------------------------------------------------------------- configuration
+_ENV_LINE = re.compile(r"""^\s*(?:export\s+)?([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*?)\s*$""")
+
+
+def load_env_file(path: Path) -> dict[str, str]:
+    """Load KEY=value pairs from a .env file into os.environ, without overriding.
+
+    Same rules as the bash loader in run_journey_app.sh, so the file behaves the
+    same whichever way the app is started:
+
+      - blank lines and lines starting with # are skipped
+      - an optional leading ``export `` is allowed
+      - one pair of matching surrounding quotes is stripped from the value
+      - variables already in the environment win (so one-off overrides like
+        ``OMOP_DB_NAME=other python app.py`` still work)
+
+    Deliberately stdlib-only (no python-dotenv), so there's one less dependency
+    to install into the venv.
+
+    @param path   location of the .env file; a missing file is not an error
+    @return       the variables this call actually set (handy for debugging)
+    @see          omop_tools/scripts/run_journey_app.sh  load_env()
+    """
+    applied: dict[str, str] = {}
+    if not path.is_file():
+        return applied
+    for raw in path.read_text(encoding="utf-8").splitlines():
+        if not raw.strip() or raw.lstrip().startswith("#"):
+            continue
+        m = _ENV_LINE.match(raw)
+        if not m:
+            continue                                    # not KEY=value; ignore
+        key, value = m.groups()
+        if len(value) >= 2 and value[0] == value[-1] and value[0] in "\"'":
+            value = value[1:-1]
+        if key in os.environ:                           # environment wins
+            continue
+        os.environ[key] = value
+        applied[key] = value
+    return applied
+
+
+def db_settings() -> dict:
+    """Connection settings for psycopg2, resolved in one place.
+
+    Order for each setting: OMOP_DB_* → libpq PG* → default. The PG* fallback
+    means the same .env drives psql, the R scripts and this app.
+
+    @return  kwargs for psycopg2.connect(); user/password are None when unset,
+             which lets libpq fall back to ~/.pgpass or peer auth
+    """
+    def pick(primary: str, fallback: str, default: str | None = None) -> str | None:
+        return os.environ.get(primary) or os.environ.get(fallback) or default
+
+    return {
+        "host": pick("OMOP_DB_HOST", "PGHOST", "localhost"),
+        "port": int(pick("OMOP_DB_PORT", "PGPORT", "5432")),
+        "dbname": pick("OMOP_DB_NAME", "PGDATABASE", "syncd_omop"),
+        "user": pick("OMOP_DB_USER", "PGUSER"),
+        "password": pick("OMOP_DB_PASSWORD", "PGPASSWORD"),
+    }
+
+
+# Load .env at import time, before anything reads the environment
+# (load_people() below runs at module level and connects straight away).
+load_env_file(ENV_FILE)
+
+
 # --------------------------------------------------------------------------- database
 def _connect():
+    """Open a new connection using db_settings(). Imported lazily so the
+    result tabs still work if psycopg2 isn't installed."""
     import psycopg2
-    return psycopg2.connect(
-        dbname=os.environ.get("OMOP_DB_NAME", "synthetic_concurrent"),
-        host=os.environ.get("OMOP_DB_HOST", "localhost"),
-        port=int(os.environ.get("OMOP_DB_PORT", "5432")),
-        user=os.environ.get("OMOP_DB_USER") or None,
-        password=os.environ.get("OMOP_DB_PASSWORD") or None,
-    )
+    return psycopg2.connect(**db_settings())
 
 
 def query(sql: str, params=None) -> pd.DataFrame:
@@ -89,8 +159,32 @@ def load_people() -> tuple[pd.DataFrame, pd.DataFrame, str | None]:
                           FROM results.cohort WHERE cohort_definition_id IN (1,2,3,4,11,12,13,14,15)""")
         people = people.drop_duplicates("person_id").set_index("person_id")
         return people, cohort, None
-    except Exception as exc:  # database not running: the result tabs still work
-        return pd.DataFrame(), pd.DataFrame(), str(exc).strip().splitlines()[0]
+    except Exception as exc:  # the result tabs still work without the database
+        return pd.DataFrame(), pd.DataFrame(), describe_db_error(exc)
+
+
+def describe_db_error(exc: Exception) -> str:
+    """Turn a database exception into a sentence that says what to *do*.
+
+    Two very different failures used to share one "start PostgreSQL" message:
+      - can't connect at all (server down, wrong host/port/password), and
+      - connected fine, but a setup step hasn't been run in this database
+        (SQLSTATE 42P01 undefined_table, e.g. results.cohort is missing).
+    psycopg2 puts the SQLSTATE on the exception as ``pgcode``; connection
+    failures have none.
+
+    @param exc  the exception raised by query()
+    @return     one user-facing sentence, ending with the original error
+    @see        https://www.postgresql.org/docs/16/errcodes-appendix.html
+    """
+    detail = str(exc).strip().splitlines()[0] if str(exc).strip() else type(exc).__name__
+    dbname = db_settings()["dbname"]
+    if getattr(exc, "pgcode", None) == "42P01":
+        hint = ("scripts/psql.sh -f omop_tools/sql/02_study_cohorts.sql"
+                if "results.cohort" in detail else "the setup steps in omop_tools/README.md")
+        return f"Connected to '{dbname}', but a required table is missing. Run {hint}, then reload. ({detail})"
+    return (f"Couldn't connect to '{dbname}'. Check that PostgreSQL is running and the "
+            f"OMOP_DB_* settings in .env are right, then reload. ({detail})")
 
 
 PEOPLE, COHORT, DB_ERROR = load_people()
@@ -180,7 +274,57 @@ def _split_path(pathway: str) -> list[str]:
     return pathway.replace("Buprenorphine-naloxone", "Buprenorphine/naloxone").split("-")
 
 
-@lru_cache(maxsize=1)
+# --------------------------------------------------------------------------- result caching
+def folder_fingerprint(folder: Path) -> tuple:
+    """A cheap summary of a results folder: every file's path, size and modified time.
+
+    Two calls return the same tuple only if no file was added, removed or rewritten
+    in between, so it works as a cache key that changes exactly when a tool reruns.
+    Reading file *metadata* (not contents) keeps this to a few milliseconds for the
+    tens of files each results folder holds.
+
+    @param folder  the results folder; a missing folder is fine
+    @return        sorted tuple of (relative path, size, mtime in ns); () if missing
+    """
+    if not folder.is_dir():
+        return ()
+    entries = []
+    for p in folder.rglob("*"):
+        if p.is_file():
+            st = p.stat()
+            entries.append((str(p.relative_to(folder)), st.st_size, st.st_mtime_ns))
+    return tuple(sorted(entries))
+
+
+def reload_when_changed(folder_for):
+    """Decorator: cache a results loader, but reload when its files change.
+
+    Plain ``@lru_cache`` remembered the first answer for the life of the app. If a
+    tab was opened before its tool had run, it cached "no results" and kept
+    showing "results not found" until the app was restarted, even after the tool
+    had finished. Here the cache key includes folder_fingerprint(), so new or
+    rewritten result files are picked up on the next page load.
+
+    @param folder_for  function taking the loader's arguments and returning the
+                       folder its results live in, e.g. ``lambda study: CC_DIR / study``
+    @return            the decorator
+    @see               folder_fingerprint()
+    """
+    def decorator(loader):
+        @lru_cache(maxsize=8)
+        def cached(fingerprint, *args):        # fingerprint is only part of the key
+            return loader(*args)
+
+        @wraps(loader)
+        def wrapper(*args):
+            return cached(folder_fingerprint(folder_for(*args)), *args)
+
+        wrapper.cache_clear = cached.cache_clear  # keep lru_cache's escape hatch
+        return wrapper
+    return decorator
+
+
+@reload_when_changed(lambda: TP_DIR)
 def load_pathways() -> dict[str, dict]:
     out = {}
     for slug, name in [("concurrent_mh_and_sud", "Concurrent MH and SUD"), ("mh_only", "MH only"),
@@ -312,7 +456,7 @@ DOMAIN_LABEL = {"condition_occurrence": "Condition", "drug_exposure": "Drug", "m
                 "observation": "Observation", "procedure_occurrence": "Procedure", "visit_occurrence": "Visit"}
 
 
-@lru_cache(maxsize=4)
+@reload_when_changed(lambda study: CC_DIR / study)
 def load_contrast(study: str) -> dict | None:
     d = CC_DIR / study
     if not (d / "data_features.parquet").exists():
@@ -336,7 +480,7 @@ def _first_day(s) -> float:
 
 
 # --------------------------------------------------------------------------- comorbidity
-@lru_cache(maxsize=1)
+@reload_when_changed(lambda: C4J_DIR)
 def load_comorbidity() -> dict[str, pd.DataFrame]:
     out = {}
     for label, suffix in [("All", "ALL"), ("Female", "FEMALE"), ("Male", "MALE")]:
@@ -414,14 +558,14 @@ def overview_tab():
              "calibrated to NSDUH 2024, study window 2024–2025). The four modules were run once on this data; "
              "this app reads their outputs and the OMOP database directly, so there is nothing to upload "
              "or configure."),
-        missing("Database connection", f" The Patient journey tab needs PostgreSQL running ({DB_ERROR}).")
+        missing("Database connection", f" The Patient journey tab is unavailable. {DB_ERROR}")
         if DB_ERROR else None,
     ])
 
 
 def patient_tab():
     if DB_ERROR:
-        return missing("Database connection", f" Start PostgreSQL and reload. ({DB_ERROR})")
+        return missing("Database connection", f" {DB_ERROR}")
     first = default_patient(1)
     return html.Div([
         html.Div(className="controls", children=[
@@ -968,5 +1112,11 @@ def ares_root_files(name):
 
 if __name__ == "__main__":
     port = int(os.environ.get("JOURNEY_APP_PORT", "8070"))
+    s = db_settings()
+    # Startup summary; the password is never printed.
     print(f"SYNCD Journey Explorer: http://localhost:{port}")
+    print(f"  database: {s['user'] or '<default user>'}@{s['host']}:{s['port']}/{s['dbname']}"
+          f"  (password {'set' if s['password'] else 'unset'})")
+    if DB_ERROR:
+        print(f"  warning: Patient journey tab disabled. {DB_ERROR}")
     app.run(host="127.0.0.1", port=port, debug=False)

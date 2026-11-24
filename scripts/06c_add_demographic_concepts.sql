@@ -5,7 +5,7 @@
 -- age-by-gender data, and foreign-key DQD checks fail.
 -- These are the fixed OHDSI standard concepts. Selecting Gender, Race and Ethnicity in a fresh
 -- Athena download would give the same rows; this script is a no-op where they already exist.
--- Usage: psql -d synthetic_concurrent -f scripts/06c_add_demographic_concepts.sql
+-- Usage: scripts/psql.sh -f scripts/06c_add_demographic_concepts.sql   (database from OMOP_DB_NAME in .env)
 BEGIN;
 
 INSERT INTO cdm.vocabulary (vocabulary_id, vocabulary_name, vocabulary_reference, vocabulary_version, vocabulary_concept_id)

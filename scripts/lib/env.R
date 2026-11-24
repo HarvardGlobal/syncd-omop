@@ -114,6 +114,52 @@ omop_connection_details <- function(driver_dir) {
   )
 }
 
+#' Open a DBI connection to the OMOP database with RPostgres, using .env.
+#'
+#' For tools built on DBI/CDMConnector rather than DatabaseConnector
+#' (e.g. CohortContrast). Same settings as omop_connection_details().
+#'
+#' @return A DBI connection. The caller is responsible for DBI::dbDisconnect().
+#' @see https://rpostgres.r-dbi.org/reference/postgres.html
+omop_dbi_connect <- function() {
+  require_env(c("OMOP_DB_NAME", "OMOP_DB_USER", "OMOP_DB_PASSWORD"))
+  port <- suppressWarnings(as.integer(Sys.getenv("OMOP_DB_PORT", "5432")))
+  if (is.na(port)) stop("OMOP_DB_PORT must be a number.", call. = FALSE)
+
+  DBI::dbConnect(
+    RPostgres::Postgres(),
+    host = Sys.getenv("OMOP_DB_HOST", "localhost"),
+    port = port,
+    dbname = Sys.getenv("OMOP_DB_NAME"),
+    user = Sys.getenv("OMOP_DB_USER"),
+    password = Sys.getenv("OMOP_DB_PASSWORD")
+  )
+}
+
+#' Copy the OMOP_DB_* settings onto libpq's PG* variables.
+#'
+#' Anything built on libpq (psql, RPostgres, apps that leave connection fields
+#' blank) then reaches the same database without its own configuration.
+#' Mirrors omop_pg_env() in scripts/lib/env.sh. Existing PG* values are kept,
+#' as an explicit override.
+#'
+#' @return Invisibly, TRUE.
+#' @see https://www.postgresql.org/docs/16/libpq-envars.html
+omop_pg_env <- function() {
+  require_env(c("OMOP_DB_NAME", "OMOP_DB_USER", "OMOP_DB_PASSWORD"))
+  map <- c(
+    PGHOST     = Sys.getenv("OMOP_DB_HOST", "localhost"),
+    PGPORT     = Sys.getenv("OMOP_DB_PORT", "5432"),
+    PGDATABASE = Sys.getenv("OMOP_DB_NAME"),
+    PGUSER     = Sys.getenv("OMOP_DB_USER"),
+    PGPASSWORD = Sys.getenv("OMOP_DB_PASSWORD")
+  )
+  for (key in names(map)) {
+    if (is.na(Sys.getenv(key, unset = NA))) do.call(Sys.setenv, stats::setNames(list(map[[key]]), key))
+  }
+  invisible(TRUE)
+}
+
 #' Point DatabaseConnector's bulk loader at psql, wherever it is installed.
 #'
 #' DatabaseConnector bulk-loads PostgreSQL with `psql \copy`, and wants the

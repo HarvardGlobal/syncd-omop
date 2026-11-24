@@ -1,15 +1,22 @@
 #!/usr/bin/env bash
-# Drive a running Comorbidity4j server (http://localhost:8181/comorbidity4web) through its web
+# Drive a running Comorbidity4j server (http://localhost:${C4J_PORT:-8181}/comorbidity4web) through its web
 # form steps with curl: upload the four input files, pair the 8 MH/SUD diagnoses against every
 # diagnosis, set the analysis parameters and run it. Results land in the server's
 # spring.servlet.multipart.location folder as result_<id>.zip/.html/.csv.
 # Usage: omop_tools/scripts/c4j_run_analysis.sh [input_dir]
 #   C4J_DIRECTIONAL=enabled counts only pairs where A precedes B (by C4J_MIN_DAYS days, default 1);
 #   the default (disabled) counts any co-occurrence, which is what comorbidity strength needs.
+#   C4J_PORT (in .env) must match the port c4j_start_server.sh used; both default to 8181.
 set -euo pipefail
-ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+# shellcheck source-path=SCRIPTDIR source=../../scripts/lib/env.sh
+source "$(dirname "$0")/../../scripts/lib/env.sh"
+ROOT="$PROJECT_ROOT/omop_tools"
 IN="${1:-$ROOT/comorbidity4j_input}"
-U=http://localhost:8181/comorbidity4web
+U="http://localhost:${C4J_PORT:-8181}/comorbidity4web"
+
+# Fail fast if the server isn't up, instead of eight lines of "000" from curl.
+# (No -f: any HTTP answer, even an error page, proves the server is listening.)
+curl -s -o /dev/null "$U/" || { echo "No Comorbidity4j server at $U. Start c4j_start_server.sh first." >&2; exit 1; }
 J=$(mktemp); trap 'rm -f "$J"' EXIT
 c() { curl -s -b "$J" -c "$J" -o /dev/null -w "%{http_code} $1\n" "$@"; }
 FILEOPTS=(-F columnSeparator=tabSep -F columnTextDelimiter=none -F isFirstRowHeader=on)

@@ -5,6 +5,8 @@ The R-based steps of this pipeline (OMOP load, Ares/Achilles/DQD, TreatmentPatte
 Instead, this repo includes a small container image that holds the whole R toolchain. Your scripts, data and outputs stay on your machine. The container just runs them.
 
 > **Summary:** nothing about the pipeline itself changed. The same scripts run in the same order from the repo root; you prefix each command with `docker compose run --rm r`.
+>
+> **New here, or not a developer?** Follow the step-by-step [GETTING-STARTED.md](GETTING-STARTED.md) checklist instead. This page explains how the toolbox works.
 
 ---
 
@@ -15,9 +17,14 @@ Instead, this repo includes a small container image that holds the whole R toolc
 ├── compose.yml            # defines the "r" service (how the container runs)
 ├── docker/
 │   └── r/
-│       ├── Dockerfile     # the image: R + JDK + psql client
-│       └── install.R      # installs every R package the scripts use
-└── .env                   # database credentials (NOT committed)
+│       ├── Dockerfile         # the image: R + JDK + psql client + curl
+│       ├── install.R          # the pipeline's R packages (slow layer, 10-20 min)
+│       └── install-viewers.R  # extra packages for the viewer apps (fast layer)
+├── scripts/
+│   ├── lib/env.R, env.sh  # shared .env loaders used by every script
+│   └── psql.sh            # psql pointed at the database in .env
+├── .env.example           # settings template (committed, placeholders only)
+└── .env                   # your real settings and password (NOT committed)
 ```
 
 | File | Purpose |
@@ -108,21 +115,31 @@ docker compose run --rm r psql -c 'SELECT current_database(), current_user;'
 Run every command from the **repo root**. The scripts build paths from `normalizePath(".")`, and the repo is mounted at `/work`, which is also the container's working directory.
 
 ```bash
-# Load vocabulary CSVs (bash + psql)
-docker compose run --rm r bash scripts/06a_load_vocab.sh source_data/athena_vocab
+# One-time: create the database and its schemas
+docker compose run --rm r scripts/psql.sh -d postgres -c "CREATE DATABASE syncd_omop;"
+docker compose run --rm r scripts/psql.sh -c "CREATE SCHEMA IF NOT EXISTS cdm; CREATE SCHEMA IF NOT EXISTS synthea; CREATE SCHEMA IF NOT EXISTS results;"
 
-# OMOP ETL
+# OMOP load. Order matters: `staging` creates the cdm.* tables that 06a fills.
 docker compose run --rm r Rscript scripts/06_load_omop.R staging
-docker compose run --rm r Rscript scripts/06_load_omop.R vocab_etl
+docker compose run --rm r bash scripts/06a_load_vocab.sh source_data/athena_vocab
+docker compose run --rm r Rscript scripts/06_load_omop.R etl
+docker compose run --rm r scripts/psql.sh -f scripts/06b_fix_screening_scores.sql
+docker compose run --rm r scripts/psql.sh -f scripts/06c_add_demographic_concepts.sql
 
 # Achilles / DQD / Ares export
 docker compose run --rm r Rscript scripts/07_run_ares.R
 
-# Analysis tools
+# Analysis tools (cohorts first; every tool reads results.cohort)
+docker compose run --rm r scripts/psql.sh -f omop_tools/sql/02_study_cohorts.sql
+docker compose run --rm r scripts/psql.sh -f omop_tools/sql/01_patientexplorer_schema.sql
 docker compose run --rm r Rscript omop_tools/scripts/run_treatmentpatterns.R
 docker compose run --rm r Rscript omop_tools/scripts/run_cohortcontrast.R
 docker compose run --rm r Rscript omop_tools/scripts/run_patientexplorer.R
+docker compose run --rm r omop_tools/scripts/c4j_start_server.sh   # then c4j_export.sh, c4j_run_analysis.sh
 ```
+
+`06_load_omop.R vocab_etl <athena_dir>` is an alternative to `06a` + `etl` that loads the
+vocabularies in R. It needs roughly 16 GB of free memory, so `06a` is the default.
 
 To save typing, add this alias to your shell config:
 

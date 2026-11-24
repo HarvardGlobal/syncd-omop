@@ -35,3 +35,4 @@ omop_tools/r_lib_cohortcontrast/
 omop_tools/comorbidity4j_input/
 omop_tools/comorbidity4j_results/
 omop_tools/cohortcontrast_results/
+omop_tools/journey_app/.venv/

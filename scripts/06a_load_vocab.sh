@@ -25,9 +25,8 @@ DB="${2:-$PGDATABASE}"
 # so 'set -e' stops the script instead of carrying on with a half-loaded database.
 PSQL="$(find_psql) -v ON_ERROR_STOP=1 -d $DB"
 
-# Fail early with a clear message if the container isn't reachable.
-$PSQL -c  'SELECT 1' >/dev/null \
-  || { echo "Can't reach $DB at $PGHOST:$PGPORT. Is the container up?" >&2; exit 1; }
+# Fail early with a clear message if the database isn't reachable.
+PGDATABASE="$DB" check_db "$PSQL"
 
 for T in vocabulary domain concept_class relationship concept concept_relationship \
          concept_synonym concept_ancestor drug_strength; do
